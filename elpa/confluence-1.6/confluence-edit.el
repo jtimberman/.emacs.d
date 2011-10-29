@@ -4,7 +4,7 @@
 
 ;; Author: James Ahlborn <james@boomi.com>
 ;; Keywords: confluence, wiki
-;; Version: 1.5
+;; Version: 1.6
 ;; Package-Requires: 
 ;; EmacsWiki: ConfluenceMode
 
@@ -44,6 +44,8 @@
 ;; 
 
 ;;; Code:
+
+(require 'font-lock)
 
 ;;
 ;; Various utility code
@@ -187,7 +189,7 @@ given STRUCT-VAR."
 
 (defface confluence-code-face
   '((((class color) (background dark))
-     (:foreground "Black" :bold t))
+     (:foreground "dim gray" :bold t))
     (((class color) (background light))
      (:foreground "dim gray"))
     (t (:bold t)))
@@ -198,13 +200,14 @@ given STRUCT-VAR."
 
 (defface confluence-panel-face
   '((((class color) (background dark))
-     (:background "Black"))
+     (:background "LightGray"))
     (((class color) (background light))
      (:background "LightGray"))
     (t nil))
   "Font Lock Mode face used for panel in confluence pages."
   :group 'confluence-faces)
 
+(defvar confluence-embedded-link-face '(font-lock-constant-face underline))
 
 (defconst confluence-font-lock-keywords-1
   (list
@@ -276,11 +279,11 @@ given STRUCT-VAR."
    ;; images, embedded content
    '("\\([!]\\)\\([^|\n]+\\)[|]\\(?:[^!\n]*\\)\\([!]\\)"
      (1 'font-lock-constant-face)
-     (2 '(font-lock-reference-face underline))
+     (2 confluence-embedded-link-face)
      (3 'font-lock-constant-face))
    '("\\([!]\\)\\([^!|\n]+\\)\\([!]\\)"
      (1 'font-lock-constant-face)
-     (2 '(font-lock-reference-face underline))
+     (2 confluence-embedded-link-face)
      (3 'font-lock-constant-face))
    
    ;; tables
