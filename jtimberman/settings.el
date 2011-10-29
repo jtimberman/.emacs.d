@@ -14,7 +14,9 @@
 (setq shell-file-name "/bin/zsh")
 
 ;; Lets have readable fonts for all the times.
+(set-face-attribute 'default nil :height 140)
 (set-default-font "Menlo-14")
+(set-frame-font "Menlo-14")
 
 ;; Full screen
 (global-set-key [C-M-return] 'ns-toggle-fullscreen)
@@ -41,6 +43,14 @@
 (setq auto-save-file-name-transforms
       `((".*" ,temporary-file-directory t)))
 
+(global-set-key (kbd "C-c t") 'insert-time-string)
+(setq insert-time-string-default-format "iso-8601-date")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; MobileOrg
+(setq org-directory "~/Documents/org")
+(setq org-mobile-inbox-for-pull "~/Documents/org/flagged.org")
+(setq org-mobile-directory "~/Dropbox/MobileOrg")
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; markdown for certain files
 (setq auto-mode-alist (cons '("\\.md" . markdown-mode) auto-mode-alist))
@@ -48,7 +58,6 @@
 (setq auto-mode-alist (cons '("\\.mkd" . markdown-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.text" . markdown-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.txt" . markdown-mode) auto-mode-alist))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; wrap-region
@@ -83,10 +92,8 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Confluence mode with sane longlines
-;; from confluence.el
-(require 'confluence)
 
-(global-set-key "\C-cg" 'confluence-get-page)
+(global-set-key "\C-cG" 'confluence-get-page)
 (global-set-key "\C-cs" 'confluence-search)
 
 ;; confluence editing support (with longlines mode)
