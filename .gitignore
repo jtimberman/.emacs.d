@@ -4,3 +4,6 @@ starter-kit-2.*
 *.tar
 backups/
 places
+auto-save-list/
+custom.el
+url/
