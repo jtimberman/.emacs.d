@@ -7,7 +7,7 @@
 ;; Best color theme.
 (require 'color-theme)
 (color-theme-initialize)
-(color-theme-irblack)
+(color-theme-ir-black)
 
 ;; Use Zsh
 (setq shell-file-name "/bin/zsh")
@@ -15,6 +15,8 @@
 ;; Lets have readable fonts for all the times.
 (set-default-font "Menlo-14")
 
+;; Full screen
+(global-set-key [C-M-return] 'ns-toggle-fullscreen)
 ;; Away all whitespace!
 (global-set-key "\C-cw" 'delete-trailing-whitespace)
 (setq show-trailing-whitespace t)
