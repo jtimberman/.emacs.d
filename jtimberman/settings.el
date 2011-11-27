@@ -1,4 +1,5 @@
 (server-start)
+(setq user-mail-address "opensource@housepub.org")
 ;; path sanity
 (when (equal system-type 'darwin)
   (setenv "PATH" (concat "/usr/local/bin:" (getenv "PATH")))
