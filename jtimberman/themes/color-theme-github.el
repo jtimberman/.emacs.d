@@ -103,10 +103,7 @@
      (show-paren-match ((t (:background "#fff6a9"))))
      (show-paren-mismatch ((t (:background "#dd1144")))))))
 
-;;(add-to-list 'color-themes '(color-theme-github  "GitHub" "Dudley Flanders"))
-
-(color-theme-github)
-
+(add-to-list 'color-themes '(color-theme-github  "GitHub" "Dudley Flanders"))
 (provide 'color-theme-github)
 
 ;;; color-theme-github.el ends here

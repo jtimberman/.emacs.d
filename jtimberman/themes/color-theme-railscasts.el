@@ -98,9 +98,6 @@
      (minibuffer-prompt ((t (:bold t :foreground "#FF6600")))))))
 
 
-(color-theme-railscasts)
-
-
 (provide 'color-theme-railscasts)
 
 ;;; color-theme-railscasts.el ends here
