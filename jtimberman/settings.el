@@ -73,7 +73,10 @@
 (add-to-list 'auto-mode-alist '("Thorfile$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("Cheffile$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("Procfile$" . ruby-mode))
+(add-to-list 'auto-mode-alist '("Vagrantfile$" . ruby-mode))
 
+(add-hook 'ruby-mode-hook
+                    (lambda () (rvm-activate-corresponding-ruby)))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; auto indent on paste
 ;; http://www.emacswiki.org/emacs/AutoIndentation
