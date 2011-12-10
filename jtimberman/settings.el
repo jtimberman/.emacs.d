@@ -94,12 +94,30 @@
                   (indent-region (region-beginning) (region-end) nil))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Confluence mode with sane longlines
+(require 'confluence)
 
 (global-set-key "\C-cG" 'confluence-get-page)
 (global-set-key "\C-cs" 'confluence-search)
 
-;; confluence editing support (with longlines mode)
+(custom-set-variables
+ '(confluence-save-credentials t)
+ '(confluence-url "https://wiki.corp.opscode.com/rpc/xmlrpc")
+ '(confluence-default-space-alist (list (cons confluence-url "CORP"))))
+
+;; Confluence URL switcheroo
+(defun wiki-corp()
+  (interactive)
+  (setq
+   confluence-url "https://wiki.corp.opscode.com/rpc/xmlrpc"
+   confluence-default-space-alist (list (cons confluence-url "CORP"))))
+
+(defun wiki-chef()
+  (interactive)
+  (setq
+   confluence-url "https://wiki.opscode.com/rpc/xmlrpc"
+   confluence-default-space-alist (list (cons confluence-url "chef"))))
+
+;; Confluence mode with sane longlines
 (autoload 'confluence-get-page "confluence" nil t)
 
  (eval-after-load "confluence"
