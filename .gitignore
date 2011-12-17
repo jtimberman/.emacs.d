@@ -7,3 +7,4 @@ places
 auto-save-list/
 custom.el
 url/
+.smex-items
