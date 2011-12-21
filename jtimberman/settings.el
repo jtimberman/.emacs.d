@@ -14,9 +14,9 @@
 (setq shell-file-name "/bin/zsh")
 
 ;; Lets have readable fonts for all the times.
-(set-face-attribute 'default nil :height 140)
-(set-default-font "Menlo-14")
-(set-frame-font "Menlo-14")
+(set-face-attribute 'default nil :height 180)
+(set-default-font "Menlo-18")
+(set-frame-font "Menlo-18")
 
 ;; Full screen
 (global-set-key [C-M-return] 'ns-toggle-fullscreen)
@@ -63,6 +63,7 @@
 ;; wrap-region
 (require 'wrap-region)
 (wrap-region-global-mode t)
+(wrap-region-add-wrapper "`" "`")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; (ruby-block-mode t)
@@ -94,8 +95,7 @@
                   (indent-region (region-beginning) (region-end) nil))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'confluence)
-
+;; Confluence
 (global-set-key "\C-cG" 'confluence-get-page)
 (global-set-key "\C-cs" 'confluence-search)
 
