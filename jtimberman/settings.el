@@ -75,9 +75,14 @@
 (add-to-list 'auto-mode-alist '("Cheffile$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("Procfile$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("Vagrantfile$" . ruby-mode))
+(add-hook 'ruby-mode-hook 'esk-paredit-nonlisp)
+;; rbenv
+(setq exec-path (cons "~/.rbenv/bin" exec-path))
+(setenv "PATH" (concat "~/.rbenv/bin:" (getenv "PATH")))
+(setq exec-path (cons "~/.rbenv/shims" exec-path))
+(setenv "PATH" (concat "~/.rbenv/shims:" (getenv "PATH")))
 
-(add-hook 'ruby-mode-hook
-                    (lambda () (rvm-activate-corresponding-ruby)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; auto indent on paste
 ;; http://www.emacswiki.org/emacs/AutoIndentation
