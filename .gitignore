@@ -9,3 +9,5 @@ custom.el
 url/
 .smex-items
 tramp
+elpa/
+el-get/
