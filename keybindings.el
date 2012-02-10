@@ -4,6 +4,8 @@
 (global-set-key (kbd "C-M-=") 'align-equal-signs)
 (global-set-key (kbd "C-M-h") 'backward-kill-word)
 
+(global-set-key (kbd "C-c u") 'move-line-up)
+(global-set-key (kbd "C-c d") 'move-line-down)
 (global-set-key (kbd "C-c C-j") 'join-line)
 (global-set-key (kbd "C-c w") 'delete-trailing-whitespace)
 (global-set-key (kbd "C-c G") 'confluence-get-page)
