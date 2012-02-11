@@ -7,9 +7,9 @@
       nil t))
 (setq my-font (cond ((font-existsp "Menlo") "Menlo")
                     ("Monospace")))
-(set-face-attribute 'default nil :family my-font :height 140)
-(set-default-font (concat my-font "-14"))
-(set-frame-font (concat my-font "-14"))
+(set-face-attribute 'default nil :family my-font :height 180)
+(set-default-font (concat my-font "-18"))
+(set-frame-font (concat my-font "-18"))
 
 ;; Use the ir-black theme
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
