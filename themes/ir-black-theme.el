@@ -43,7 +43,7 @@
       (*comments*           "#7C7C7C")
       (*constant*           "#99CC99")
       (*current-line*       "#151515")
-      (*cursor-block*       "#FFFFFF")
+      (*cursor-block*       "#FFA560")
       (*cursor-underscore*  "#8888AA")
       (*keywords*           "#96CBFE")
       (*light-purple*       "#FFCCFF")
@@ -105,6 +105,7 @@
    `(mode-line ((t (:background, *mode-line-bg* :foreground, *mode-line-fg*))))
    `(mode-line-inactive ((t (:background, *mode-line-bg* :foreground, *background-color*))))
    `(text-cursor ((t (:background, *cursor-underscore*))))
+   `(cursor ((t (:background, *cursor-block*))))
    `(vertical-border ((t (:foreground, *background-color*)))) ;; between splits
 
    ;; show-paren
