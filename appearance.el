@@ -2,14 +2,11 @@
 (setq inhibit-startup-message t)
 
 ;; Set default font
-(defun font-existsp (font)
-  (if (null (x-list-fonts font))
-      nil t))
-(setq my-font (cond ((font-existsp "Menlo") "Menlo")
-                    ("Monospace")))
-(set-face-attribute 'default nil :family my-font :height 180)
-(set-default-font (concat my-font "-18"))
-(set-frame-font (concat my-font "-18"))
+(if window-system
+    (setq my-font "Menlo")
+  (set-face-attribute 'default nil :family my-font :height 180)
+  (set-default-font (concat my-font "-18"))
+  (set-frame-font (concat my-font "-18")))
 
 ;; Use the ir-black theme
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
