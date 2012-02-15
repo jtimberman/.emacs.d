@@ -1,12 +1,13 @@
 ;; Disable splash page
 (setq inhibit-startup-message t)
 
+
 ;; Set default font
-(if window-system
-    (setq my-font "Menlo")
-  (set-face-attribute 'default nil :family my-font :height 180)
-  (set-default-font (concat my-font "-18"))
-  (set-frame-font (concat my-font "-18")))
+(setq my-font (cond ((window-system) "Menlo")
+                    ("Monospace")))
+(set-face-attribute 'default nil :family my-font :height 180)
+(set-default-font (concat my-font "-18"))
+(set-frame-font (concat my-font "-18"))
 
 ;; Use the ir-black theme
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
