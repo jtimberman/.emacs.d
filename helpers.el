@@ -97,6 +97,14 @@
 (defun enlarge-window-left  () (interactive) (enlarge-window -1 t))
 (defun enlarge-window-right () (interactive) (enlarge-window 1 t))
 
+;;; Stefan Monnier <foo at acm.org>. It is the opposite of 
+;;; fill-paragraph. Takes a multi-line paragraph and makes 
+;;; it into a single line of text.
+(defun unfill-paragraph ()
+  (interactive)
+  (let ((fill-column (point-max)))
+    (fill-paragraph nil)))
+
 
 ;;
 ;; Window Swapping
