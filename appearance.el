@@ -17,10 +17,8 @@
 (menu-bar-mode 0)
 
 ;; Disable toolbar
-(tool-bar-mode -1)
-
-;; Scrollbar
-(set-scroll-bar-mode 'nil)
+(if window-system
+    (tool-bar-mode -1))
 
 ;; Show matching paranthensis
 (show-paren-mode t)
