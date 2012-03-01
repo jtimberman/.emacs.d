@@ -62,12 +62,12 @@
 
 ;;
 ;; Align Equal Signs
-;;
-
-(defun align-equal-signs()
-  (interactive)
-  (align-regexp "="))
-
+;; corrected form from:
+;;   http://stackoverflow.com/questions/3633120/emacs-hotkey-to-align-equal-signs
+(defun align-equal-signs (begin end)
+  "Align region to equal signs"
+  (interactive "r")
+  (align-regexp begin end "\\(\\s-*\\)=" 1 1 ))
 
 ;;
 ;; Yank Pop Forwards
