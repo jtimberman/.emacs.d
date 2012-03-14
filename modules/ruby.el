@@ -1,3 +1,13 @@
+(defun pry ()
+  (interactive)
+  (run-ruby "pry" "pry")
+  (setq comint-get-old-input #'pry-get-old-input))
+
+(defun pry-get-old-input ()
+  (let ((inf-ruby-first-prompt-pattern "pry(.*).*> *"))
+    (inf-ruby-get-old-input)))
+
+
 ;; don't use the deep indentations, ffs.
 (setq ruby-deep-indent-paren nil)
 ;; knife, thor, chef and proc are ruby, others are in esk.
