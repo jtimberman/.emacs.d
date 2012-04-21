@@ -15,6 +15,7 @@
 
 (defvar elpa-packages '(clojure-mode
                         coffee-mode
+                        color-theme-solarized
                         confluence
                         ctags
                         feature-mode

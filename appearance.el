@@ -5,13 +5,11 @@
 ;; Set default font
 (setq my-font (cond ((window-system) "Menlo")
                     ("Monospace")))
-(set-face-attribute 'default nil :family my-font :height 180)
-(set-default-font (concat my-font "-18"))
-(set-frame-font (concat my-font "-18"))
+(set-face-attribute 'default nil :family my-font :height 140)
+(set-default-font (concat my-font "-14"))
+(set-frame-font (concat my-font "-14"))
 
-;; Use the ir-black theme
-(add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
-(load-theme 'ir-black t)
+(load-theme 'solarized-light t)
 
 ;; Disable menu-bar
 (menu-bar-mode 0)
