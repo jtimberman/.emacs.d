@@ -1,3 +1,7 @@
+;; confluence doesn't load from packages.el; WAT.
+(load-file (concat "~/.emacs.d/elpa/confluence-1.6/confluence.el"))
+(require 'confluence)
+
 (custom-set-variables
  '(confluence-save-credentials t)
  '(confluence-url "https://wiki.corp.opscode.com/rpc/xmlrpc")

@@ -4,7 +4,7 @@
   (setq comint-get-old-input #'pry-get-old-input))
 
 (defun pry-get-old-input ()
-  (let ((inf-ruby-first-prompt-pattern "pry(.*).*> *"))
+  (let ((inf-ruby-first-prompt-pattern "pry.*(.*).*> *"))
     (inf-ruby-get-old-input)))
 
 

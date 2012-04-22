@@ -17,6 +17,15 @@
 
 
 ;;
+;; Insert a code block in org mode. Couldn't find a macro for this already.
+;;
+(defvar org-code-block "#+BEGIN_SRC\n\n#+END_SRC")
+(defun org-code-block-insert ()
+  (interactive)
+  (insert org-code-block))
+
+
+;;
 ;; Move lines
 ;; - from http://www.emacswiki.org/emacs/MoveLine
 
