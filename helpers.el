@@ -1,4 +1,16 @@
 ;;
+;; Switch between Solarized Light and Dark
+;;
+
+(defun toggle-solarized ()
+  "Toggles between solarized light and dark."
+  (interactive)
+  (if (eq (frame-parameter (next-frame) 'background-mode) 'dark)
+      (load-theme 'solarized-light)
+    (load-theme 'solarized-dark)))
+
+
+;;
 ;; Auto-indent on Paste
 ;;
 

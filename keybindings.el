@@ -13,6 +13,8 @@
 (global-set-key (kbd "C-c t") 'insert-time-string)
 (global-set-key (kbd "C-c f") 'find-file-in-project)
 
+(global-set-key (kbd "C-c l") 'toggle-solarized)
+
 ;; Niceties on Mac OS X
 (global-set-key (kbd "s-<up>") 'beginning-of-buffer)
 (global-set-key (kbd "s-<down>") 'end-of-buffer)
