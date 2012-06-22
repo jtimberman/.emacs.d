@@ -67,4 +67,5 @@
 
 (defun initialize-packages ()
   (require 'xlicense)
-  (require 'full-ack))
+  (require 'full-ack)
+  (require 'yaml-mode))
