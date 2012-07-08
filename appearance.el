@@ -30,8 +30,8 @@
 (setq linum-format "%d ")
 
 ;; Whitespace
-(setq show-trailing-whitespace t)
+(setq-default show-trailing-whitespace t)
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 ;; format for time strings
 (setq insert-time-string-default-format "iso-8601-date")
-
