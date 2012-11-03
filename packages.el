@@ -37,6 +37,7 @@
                         powershell
                         python
                         ruby-block
+                        ruby-tools
                         rvm
                         sass-mode
                         scala-mode
