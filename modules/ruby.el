@@ -38,14 +38,18 @@
     (list "ruby" (list "-c" local-file))))
 
 (push '(".+\\.rb$" flymake-ruby-init) flymake-allowed-file-name-masks)
+(push '("Berksfile$" flymake-ruby-init) flymake-allowed-file-name-masks)
+(push '("Capfile$" flymake-ruby-init) flymake-allowed-file-name-masks)
+(push '("Cheffile$" flymake-ruby-init) flymake-allowed-file-name-masks)
+(push '("Collanderfile$" flymake-ruby-init) flymake-allowed-file-name-masks)
+(push '("Gemfile$" flymake-ruby-init) flymake-allowed-file-name-masks)
+(push '("Guardfile$" flymake-ruby-init) flymake-allowed-file-name-masks)
+(push '("Kitchenfile$" flymake-ruby-init) flymake-allowed-file-name-masks)
+(push '("Procfile$" flymake-ruby-init) flymake-allowed-file-name-masks)
 (push '("Rakefile$" flymake-ruby-init) flymake-allowed-file-name-masks)
 (push '("Thorfile$" flymake-ruby-init) flymake-allowed-file-name-masks)
-(push '("Cheffile$" flymake-ruby-init) flymake-allowed-file-name-masks)
-(push '("Procfile$" flymake-ruby-init) flymake-allowed-file-name-masks)
-(push '("Kitchenfile$" flymake-ruby-init) flymake-allowed-file-name-masks)
-(push '("Cheffile$" flymake-ruby-init) flymake-allowed-file-name-masks)
-(push '("Berksfile$" flymake-ruby-init) flymake-allowed-file-name-masks)
 (push '("Vagrantfile$" flymake-ruby-init) flymake-allowed-file-name-masks)
+
 
 (push '("^\\(.*\\):\\([0-9]+\\): \\(.*\\)$" 1 2 nil 3) flymake-err-line-patterns)
 
