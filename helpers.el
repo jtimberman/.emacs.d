@@ -210,7 +210,7 @@
 ;; https://github.com/jimweirich/emacs-setup-esk
 (defconst jw-eval-buffer-commands
   '(("js" . "/usr/local/bin/node")
-    ("rb" . "ruby")
+    ("rb" . "/Users/jtimberman/.rbenv/shims/ruby")
     ("coffee" . "/usr/local/bin/coffee")
     ("clj" . "/Users/jim/local/bin/clojure")))
 
