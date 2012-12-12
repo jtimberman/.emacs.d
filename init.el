@@ -20,3 +20,5 @@
 
 ;; Initialize packages in packages.el
 (initialize-packages)
+
+(setq initial-major-mode 'org-mode)
