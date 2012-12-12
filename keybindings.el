@@ -12,7 +12,7 @@
 (global-set-key (kbd "C-c s") 'confluence-search)
 (global-set-key (kbd "C-c t") 'insert-time-string)
 (global-set-key (kbd "C-c f") 'find-file-in-project)
-
+(global-set-key (kbd "C-c F") 'find-grep-dired)
 (global-set-key (kbd "C-c l") 'toggle-solarized)
 
 ;; Niceties on Mac OS X
