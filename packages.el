@@ -17,7 +17,6 @@
                         coffee-mode
                         color-theme-solarized
                         confluence
-                        ctags
                         feature-mode
                         find-file-in-project
                         full-ack
