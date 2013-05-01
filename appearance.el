@@ -5,9 +5,9 @@
 ;; Set default font
 (setq my-font (cond ((window-system) "Menlo")
                     ("Monospace")))
-(set-face-attribute 'default nil :family my-font :height 140)
-(set-default-font (concat my-font "-14"))
-(set-frame-font (concat my-font "-14"))
+(set-face-attribute 'default nil :family my-font :height 180)
+(set-default-font (concat my-font "-18"))
+(set-frame-font (concat my-font "-18"))
 
 (load-theme 'solarized-light t)
 
