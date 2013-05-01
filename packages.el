@@ -36,9 +36,9 @@
                         paredit
                         powershell
                         python
+                        rbenv
                         ruby-block
                         ruby-tools
-                        rvm
                         sass-mode
                         scala-mode
                         scss-mode
