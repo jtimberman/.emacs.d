@@ -17,6 +17,7 @@
                         coffee-mode
                         color-theme-solarized
                         confluence
+                        dash
                         feature-mode
                         find-file-in-project
                         full-ack
