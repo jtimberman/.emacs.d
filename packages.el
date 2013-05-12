@@ -5,17 +5,18 @@
 
 (require 'package)
 
-(add-to-list 'package-archives
-             '("marmalade" . "http://marmalade-repo.org/packages/") t)
+(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+                         ("marmalade" . "http://marmalade-repo.org/packages/")))
+ ;;                        ("melpa" . "http://melpa.milkbox.net/packages/")))
 
 (package-initialize)
 
 (when (not package-archive-contents)
   (package-refresh-contents))
 
-(defvar elpa-packages '(clojure-mode
+(defvar elpa-packages '(apache-mode
+                        clojure-mode
                         coffee-mode
-                        color-theme-solarized
                         confluence
                         dash
                         feature-mode
@@ -29,22 +30,28 @@
                         inf-ruby
                         jira
                         json
+                        json-mode
                         magit
                         magithub
                         markdown-mode
                         maxframe
+                        nginx-mode
                         paredit
                         powershell
                         python
                         rbenv
                         ruby-block
+                        ruby-end
                         ruby-tools
                         sass-mode
                         scala-mode
+                        scratch
                         scss-mode
                         slime
                         slime-repl
                         smex
+                        solarized-theme
+                        ssh-config-mode
                         starter-kit
                         starter-kit-bindings
                         starter-kit-eshell

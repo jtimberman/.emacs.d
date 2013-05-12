@@ -24,7 +24,8 @@
 (add-to-list 'auto-mode-alist '("Thorfile$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("Vagrantfile$" . ruby-mode))
 (add-hook 'ruby-mode-hook 'esk-paredit-nonlisp)
-
+(add-hook 'ruby-mode-hook 'ruby-end-mode)
+(add-hook 'ruby-mode-hook 'ruby-tools-mode)
 
 (require 'flymake)
 
@@ -58,6 +59,8 @@
              (if (and (not (null buffer-file-name)) (file-writable-p buffer-file-name))
                  (flymake-mode))
              ))
+
+(defalias 'inf-ruby-keys 'inf-ruby-setup-keybindings)
 
 ;; Setting rbenv path
 (setenv "PATH" (concat (getenv "HOME") "/.rbenv/shims:" (getenv "HOME") "/.rbenv/bin:" (getenv "PATH")))
