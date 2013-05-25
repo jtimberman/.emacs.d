@@ -42,6 +42,7 @@
                         rbenv
                         ruby-block
                         ruby-end
+                        ruby-hash-syntax
                         ruby-tools
                         sass-mode
                         scala-mode
@@ -76,4 +77,5 @@
 (defun initialize-packages ()
   (require 'xlicense)
   (require 'full-ack)
-  (require 'yaml-mode))
+  (require 'yaml-mode)
+  (require 'ruby-hash-syntax))
