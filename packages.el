@@ -78,3 +78,6 @@
   (require 'full-ack)
   (require 'yaml-mode)
   (require 'ruby-hash-syntax))
+
+(load-file (concat user-emacs-directory "elpa/json-1.2/json.el"))
+(require 'json)
