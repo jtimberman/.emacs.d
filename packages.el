@@ -7,7 +7,6 @@
 
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
                          ("marmalade" . "http://marmalade-repo.org/packages/")))
- ;;                        ("melpa" . "http://melpa.milkbox.net/packages/")))
 
 (package-initialize)
 
@@ -17,6 +16,7 @@
 (defvar elpa-packages '(apache-mode
                         clojure-mode
                         coffee-mode
+                        color-theme-solarized
                         confluence
                         dash
                         feature-mode
@@ -51,7 +51,6 @@
                         slime
                         slime-repl
                         smex
-                        solarized-theme
                         ssh-config-mode
                         starter-kit
                         starter-kit-bindings
