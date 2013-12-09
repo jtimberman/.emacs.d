@@ -6,19 +6,23 @@
 (require 'package)
 
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-                         ("marmalade" . "http://marmalade-repo.org/packages/")))
+                         ("marmalade" . "http://marmalade-repo.org/packages/")
+                         ("melpa" . "http://melpa.milkbox.net/packages/")))
 
 (package-initialize)
 
 (when (not package-archive-contents)
   (package-refresh-contents))
 
-(defvar elpa-packages '(apache-mode
+(defvar elpa-packages '(ag
+                        apache-mode
+                        auto-complete
                         clojure-mode
                         coffee-mode
                         color-theme-solarized
                         confluence
                         dash
+                        dash-at-point
                         feature-mode
                         find-file-in-project
                         full-ack
@@ -79,7 +83,9 @@
   (require 'xlicense)
   (require 'full-ack)
   (require 'yaml-mode)
-  (require 'ruby-hash-syntax))
+  (require 'ruby-hash-syntax)
+  (require 'auto-complete-config)
+  (ac-config-default))
 
 (load-file (concat user-emacs-directory "elpa/json-1.2/json.el"))
 (require 'json)
