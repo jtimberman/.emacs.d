@@ -1,66 +1,26 @@
-(defun pry ()
-  (interactive)
-  (run-ruby "pry" "pry")
-  (setq comint-get-old-input #'pry-get-old-input))
-
-(defun pry-get-old-input ()
-  (let ((inf-ruby-first-prompt-pattern "pry.*(.*).*> *"))
-    (inf-ruby-get-old-input)))
-
-
-;; don't use the deep indentations, ffs.
+(setq enh-ruby-bounce-deep-indent t)
+(setq enh-ruby-hanging-brace-indent-level 2)
 (setq ruby-deep-indent-paren nil)
-;; knife, thor, chef and proc are ruby, others are in esk.
-(add-to-list 'auto-mode-alist '("\\.knife$" . ruby-mode))
-(add-to-list 'auto-mode-alist '("Berksfile$" . ruby-mode))
-(add-to-list 'auto-mode-alist '("Capfile$" . ruby-mode))
-(add-to-list 'auto-mode-alist '("Cheffile$" . ruby-mode))
-(add-to-list 'auto-mode-alist '("Collanderfile$" . ruby-mode))
-(add-to-list 'auto-mode-alist '("Gemfile$" . ruby-mode))
-(add-to-list 'auto-mode-alist '("Guardfile$" . ruby-mode))
-(add-to-list 'auto-mode-alist '("Kitchenfile$" . ruby-mode))
-(add-to-list 'auto-mode-alist '("Procfile$" . ruby-mode))
-(add-to-list 'auto-mode-alist '("Rantfile$" . ruby-mode))
-(add-to-list 'auto-mode-alist '("Thorfile$" . ruby-mode))
-(add-to-list 'auto-mode-alist '("Vagrantfile$" . ruby-mode))
-(add-hook 'ruby-mode-hook 'esk-paredit-nonlisp)
-(add-hook 'ruby-mode-hook 'ruby-end-mode)
-(add-hook 'ruby-mode-hook 'ruby-tools-mode)
 
-(require 'flymake)
-
-;; Invoke ruby with '-c' to get syntax checking
-(defun flymake-ruby-init ()
-  (let* ((temp-file   (flymake-init-create-temp-buffer-copy
-                       'flymake-create-temp-inplace))
-         (local-file  (file-relative-name
-                       temp-file
-                       (file-name-directory buffer-file-name))))
-    (list "ruby" (list "-c" local-file))))
-
-(push '(".+\\.rb$" flymake-ruby-init) flymake-allowed-file-name-masks)
-(push '("Berksfile$" flymake-ruby-init) flymake-allowed-file-name-masks)
-(push '("Capfile$" flymake-ruby-init) flymake-allowed-file-name-masks)
-(push '("Cheffile$" flymake-ruby-init) flymake-allowed-file-name-masks)
-(push '("Collanderfile$" flymake-ruby-init) flymake-allowed-file-name-masks)
-(push '("Gemfile$" flymake-ruby-init) flymake-allowed-file-name-masks)
-(push '("Guardfile$" flymake-ruby-init) flymake-allowed-file-name-masks)
-(push '("Kitchenfile$" flymake-ruby-init) flymake-allowed-file-name-masks)
-(push '("Procfile$" flymake-ruby-init) flymake-allowed-file-name-masks)
-(push '("Rakefile$" flymake-ruby-init) flymake-allowed-file-name-masks)
-(push '("Thorfile$" flymake-ruby-init) flymake-allowed-file-name-masks)
-(push '("Vagrantfile$" flymake-ruby-init) flymake-allowed-file-name-masks)
-
-
-(push '("^\\(.*\\):\\([0-9]+\\): \\(.*\\)$" 1 2 nil 3) flymake-err-line-patterns)
-
-(add-hook 'ruby-mode-hook
-          '(lambda ()
-             (if (and (not (null buffer-file-name)) (file-writable-p buffer-file-name))
-                 (flymake-mode))
-             ))
-
-(defalias 'inf-ruby-keys 'inf-ruby-setup-keybindings)
+(autoload 'enh-ruby-mode "enh-ruby-mode" "Major mode for ruby files" t)
+(add-to-list 'auto-mode-alist '("\\.rb$" . enh-ruby-mode))
+(add-to-list 'interpreter-mode-alist '("ruby" . enh-ruby-mode))
+(add-to-list 'auto-mode-alist '("\\.knife$" . enh-ruby-mode))
+(add-to-list 'auto-mode-alist '("Berksfile$" . enh-ruby-mode))
+(add-to-list 'auto-mode-alist '("Capfile$" . enh-ruby-mode))
+(add-to-list 'auto-mode-alist '("Cheffile$" . enh-ruby-mode))
+(add-to-list 'auto-mode-alist '("Collanderfile$" . enh-ruby-mode))
+(add-to-list 'auto-mode-alist '("Gemfile$" . enh-ruby-mode))
+(add-to-list 'auto-mode-alist '("Guardfile$" . enh-ruby-mode))
+(add-to-list 'auto-mode-alist '("Kitchenfile$" . enh-ruby-mode))
+(add-to-list 'auto-mode-alist '("Procfile$" . enh-ruby-mode))
+(add-to-list 'auto-mode-alist '("Rantfile$" . enh-ruby-mode))
+(add-to-list 'auto-mode-alist '("Thorfile$" . enh-ruby-mode))
+(add-to-list 'auto-mode-alist '("Vagrantfile$" . enh-ruby-mode))
+(add-hook 'enh-ruby-mode-hook 'esk-paredit-nonlisp)
+(add-hook 'enh-ruby-mode-hook 'ruby-end-mode)
+(add-hook 'enh-ruby-mode-hook 'ruby-tools-mode)
+(add-hook 'enh-ruby-mode-hook 'robe-mode)
 
 ;; Setting rbenv path
 (setenv "PATH" (concat (getenv "HOME") "/.rbenv/shims:" (getenv "HOME") "/.rbenv/bin:" (getenv "PATH")))

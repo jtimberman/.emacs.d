@@ -40,6 +40,8 @@
                         powershell
                         python
                         rbenv
+                        enh-ruby-mode
+                        robe
                         ruby-block
                         ruby-end
                         ruby-hash-syntax
