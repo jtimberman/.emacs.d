@@ -31,6 +31,7 @@
                         haskell-mode
                         http-twiddle
                         ido-ubiquitous
+                        ido-vertical-mode
                         inf-ruby
                         jira
                         json
@@ -84,6 +85,7 @@
   (require 'full-ack)
   (require 'yaml-mode)
   (require 'ruby-hash-syntax)
+  (require 'ido-vertical-mode)
   (require 'auto-complete-config)
   (ac-config-default))
 
