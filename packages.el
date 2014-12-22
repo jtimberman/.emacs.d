@@ -42,7 +42,6 @@
                         paredit
                         powershell
                         python
-                        rbenv
                         enh-ruby-mode
                         robe
                         ruby-block
