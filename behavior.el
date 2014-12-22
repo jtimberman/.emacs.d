@@ -31,3 +31,14 @@
 (wrap-region-global-mode t)
 (wrap-region-add-wrapper "`" "`")
 
+;; zomg https://gist.github.com/kevsmith/9391287
+(setq interprogram-cut-function
+      (lambda (text &optional push)
+        (let* ((process-connection-type nil)
+               (pbproxy (start-process "pbcopy" "pbcopy" "/usr/bin/pbcopy")))
+          (process-send-string pbproxy text)
+          (process-send-eof pbproxy))))
+
+(setq interprogram-paste-function
+      (lambda ()
+        (shell-command-to-string "pbpaste")))
