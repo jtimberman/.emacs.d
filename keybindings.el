@@ -1,3 +1,6 @@
+;; http://www.emacswiki.org/emacs/AutoIndentation works in most modes
+(define-key global-map (kbd "RET") 'newline-and-indent)
+
 (global-set-key (kbd "C-x C-k") 'kill-buffer)
 (global-set-key (kbd "M-Y") 'yank-pop-forwards)
 
