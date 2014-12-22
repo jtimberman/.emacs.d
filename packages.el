@@ -20,7 +20,6 @@
                         clojure-mode
                         coffee-mode
                         color-theme-solarized
-                        confluence
                         dash
                         dash-at-point
                         feature-mode
@@ -33,7 +32,6 @@
                         ido-ubiquitous
                         ido-vertical-mode
                         inf-ruby
-                        jira
                         json
                         json-mode
                         magit
