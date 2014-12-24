@@ -54,6 +54,7 @@
                         scss-mode
                         slime
                         slime-repl
+                        smartparens
                         smex
                         ssh-config-mode
                         starter-kit
@@ -84,6 +85,7 @@
   (require 'ruby-hash-syntax)
   (require 'ido-vertical-mode)
   (require 'auto-complete-config)
+  (require 'smartparens-config)
   (ac-config-default))
 
 (load-file (concat user-emacs-directory "elpa/json-1.2/json.el"))
