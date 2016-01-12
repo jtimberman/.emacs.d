@@ -35,7 +35,7 @@
                         json
                         json-mode
                         magit
-                        magithub
+                        magit-gh-pulls
                         markdown-mode
                         maxframe
                         nginx-mode
@@ -45,9 +45,10 @@
                         enh-ruby-mode
                         robe
                         ruby-block
-                        ruby-end
                         ruby-hash-syntax
                         ruby-tools
+                        rust-mode
+                        rustfmt
                         sass-mode
                         scala-mode
                         scratch
