@@ -18,6 +18,7 @@
 (add-to-list 'auto-mode-alist '("Thorfile$" . enh-ruby-mode))
 (add-to-list 'auto-mode-alist '("Vagrantfile$" . enh-ruby-mode))
 (add-hook 'enh-ruby-mode-hook 'smartparens-mode)
-(add-hook 'enh-ruby-mode-hook 'ruby-end-mode)
 (add-hook 'enh-ruby-mode-hook 'ruby-tools-mode)
 (add-hook 'enh-ruby-mode-hook 'robe-mode)
+(add-hook 'enh-ruby-mode
+          (lambda () (auto-fill-mode -1)))
