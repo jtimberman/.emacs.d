@@ -87,6 +87,7 @@
   (require 'ido-vertical-mode)
   (require 'auto-complete-config)
   (require 'smartparens-config)
+  (require 'rust-mode)
   (ac-config-default))
 
 (load-file (concat user-emacs-directory "elpa/json-1.2/json.el"))
