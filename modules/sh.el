@@ -1,3 +1,8 @@
 (add-to-list 'auto-mode-alist '("\*\\.zsh$" . sh-mode))
 (add-to-list 'auto-mode-alist '("\\.zshrc" . sh-mode))
-(setq sh-indentation 2)
+
+(add-hook 'sh-mode-hook
+          (lambda () (auto-fill-mode -1)))
+
+(setq sh-basic-offset 2
+      sh-indentation 2)
