@@ -9,7 +9,7 @@
 (set-default-font (concat my-font "-18"))
 (set-frame-font (concat my-font "-18"))
 
-(load-theme 'solarized-light t)
+(load-theme 'habitat t)
 
 ;; Disable menu-bar
 (menu-bar-mode 0)
