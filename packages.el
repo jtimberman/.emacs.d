@@ -22,7 +22,6 @@
                         coffee-mode
                         color-theme-solarized
                         dash
-                        dash-at-point
                         feature-mode
                         find-file-in-project
                         full-ack
@@ -30,7 +29,7 @@
                         haml-mode
                         haskell-mode
                         http-twiddle
-                        ido-ubiquitous
+                        ido-completing-read+
                         ido-vertical-mode
                         inf-ruby
                         json
@@ -49,7 +48,6 @@
                         ruby-hash-syntax
                         ruby-tools
                         rust-mode
-                        rustfmt
                         sass-mode
                         scala-mode
                         scratch
@@ -90,6 +88,3 @@
   (require 'smartparens-config)
   (require 'rust-mode)
   (ac-config-default))
-
-(load-file (concat user-emacs-directory "elpa/json-1.2/json.el"))
-(require 'json)
