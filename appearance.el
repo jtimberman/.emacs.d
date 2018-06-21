@@ -5,12 +5,12 @@
 ;; Set default font
 (setq my-font (cond ((window-system) "Menlo")
                     ("Monospace")))
-(set-face-attribute 'default nil :family my-font :height 180)
-(set-default-font (concat my-font "-18"))
-(set-frame-font (concat my-font "-18"))
+(set-face-attribute 'default nil :family my-font :height 160)
+(set-default-font (concat my-font "-16"))
+(set-frame-font (concat my-font "-16"))
 
-(load-theme 'habitat t)
-
+;;(load-theme 'habitat t)
+(load-theme 'solarized-light t)
 ;; Disable menu-bar
 (menu-bar-mode 0)
 
