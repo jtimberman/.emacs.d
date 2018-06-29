@@ -26,6 +26,7 @@
                         find-file-in-project
                         full-ack
                         gist
+                        go-mode
                         haml-mode
                         haskell-mode
                         http-twiddle
