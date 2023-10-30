@@ -145,18 +145,13 @@
 ;;
 ;; Helpers for confluence mode
 ;;
-
-(defun wiki-corp()
-  (interactive)
-  (setq
-   confluence-url "https://wiki.corp.opscode.com/rpc/xmlrpc"
-   confluence-default-space-alist (list (cons confluence-url "CORP"))))
-
-(defun wiki-chef()
-  (interactive)
-  (setq
-   confluence-url "https://wiki.opscode.com/rpc/xmlrpc"
-   confluence-default-space-alist (list (cons confluence-url "chef"))))
+;; Unsure whether I'll ever use this again...
+;;
+;; (defun wiki-corp()
+;;   (interactive)
+;;   (setq
+;;    confluence-url "https://DOMAIN/rpc/xmlrpc"
+;;    confluence-default-space-alist (list (cons confluence-url "CORP"))))
 
 ;; Confluence mode with sane longlines
 (autoload 'confluence-get-page "confluence" nil t)

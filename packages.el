@@ -20,8 +20,8 @@
                         auto-complete
                         clojure-mode
                         coffee-mode
-                        color-theme-solarized
                         dash
+                        dockerfile-mode
                         feature-mode
                         find-file-in-project
                         full-ack
@@ -29,7 +29,6 @@
                         go-mode
                         haml-mode
                         haskell-mode
-                        http-twiddle
                         ido-completing-read+
                         ido-vertical-mode
                         inf-ruby
@@ -41,31 +40,20 @@
                         maxframe
                         nginx-mode
                         paredit
-                        powershell
                         python
                         enh-ruby-mode
+                        puppet-mode
                         robe
-                        ruby-block
-                        ruby-hash-syntax
-                        ruby-tools
-                        rust-mode
                         sass-mode
                         scala-mode
                         scratch
                         scss-mode
                         slime
-                        slime-repl
                         smartparens
                         smex
-                        ssh-config-mode
-                        starter-kit
-                        starter-kit-bindings
-                        starter-kit-eshell
-                        starter-kit-js
-                        starter-kit-lisp
-                        starter-kit-ruby
+                        solarized-theme
+                        terraform-mode
                         wrap-region
-                        xlicense
                         xml-rpc
                         yaml-mode
                         yasnippet))
@@ -80,12 +68,9 @@
 ;;
 
 (defun initialize-packages ()
-  (require 'xlicense)
   (require 'full-ack)
   (require 'yaml-mode)
-  (require 'ruby-hash-syntax)
   (require 'ido-vertical-mode)
   (require 'auto-complete-config)
   (require 'smartparens-config)
-  (require 'rust-mode)
   (ac-config-default))

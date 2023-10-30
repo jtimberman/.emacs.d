@@ -42,3 +42,6 @@
 (setq interprogram-paste-function
       (lambda ()
         (shell-command-to-string "pbpaste")))
+
+(add-hook 'sh-mode-hook
+          (setq tab-width 4))

@@ -3,14 +3,15 @@
 
 
 ;; Set default font
-(setq my-font (cond ((window-system) "Menlo")
+(setq my-font (cond ((window-system) "IBM Plex Mono")
                     ("Monospace")))
-(set-face-attribute 'default nil :family my-font :height 160)
-(set-default-font (concat my-font "-16"))
-(set-frame-font (concat my-font "-16"))
+(set-face-attribute 'default nil :family my-font :height 140)
+(set-frame-font (concat my-font "-14"))
 
-;;(load-theme 'habitat t)
+(setq solarized-use-variable-pitch nil)
+(setq solarized-scale-org-headlines nil)
 (load-theme 'solarized-light t)
+
 ;; Disable menu-bar
 (menu-bar-mode 0)
 
@@ -25,13 +26,8 @@
 (column-number-mode t)
 
 ;; Show line numbers
-(require 'linum)
-(global-linum-mode 1)
-(setq linum-format "%d ")
+(global-display-line-numbers-mode 1)
 
 ;; Whitespace
 (setq-default show-trailing-whitespace t)
 (remove-hook 'before-save-hook 'delete-trailing-whitespace)
-
-;; format for time strings
-(setq insert-time-string-default-format "iso-8601-date")

@@ -24,3 +24,6 @@
 (global-set-key (kbd "s-<left>") 'beginning-of-line)
 (global-set-key (kbd "s-<right>") 'end-of-line)
 (global-set-key [C-M-return] 'ns-toggle-fullscreen)
+
+;; Why isn't this keybound by default? Who knows.
+(global-set-key (kbd "C-c r") 'revert-buffer)
