@@ -18,7 +18,6 @@
 (defvar elpa-packages '(ag
                         apache-mode
                         auto-complete
-                        clojure-mode
                         coffee-mode
                         dash
                         dockerfile-mode
@@ -27,8 +26,6 @@
                         full-ack
                         gist
                         go-mode
-                        haml-mode
-                        haskell-mode
                         ido-completing-read+
                         ido-vertical-mode
                         inf-ruby
@@ -44,10 +41,7 @@
                         enh-ruby-mode
                         puppet-mode
                         robe
-                        sass-mode
-                        scala-mode
                         scratch
-                        scss-mode
                         slime
                         smartparens
                         smex
