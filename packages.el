@@ -5,8 +5,7 @@
 
 (require 'package)
 
-(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-                         ("marmalade" . "http://marmalade-repo.org/packages/")
+(setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
                          ("melpa-stable" . "https://stable.melpa.org/packages/")))
 
 
@@ -16,31 +15,28 @@
   (package-refresh-contents))
 
 (defvar elpa-packages '(ag
-                        apache-mode
                         auto-complete
-                        coffee-mode
+                        cargo-mode
+                        clojure-mode
                         dash
                         dockerfile-mode
-                        feature-mode
+                        elein
+                        enh-ruby-mode
                         find-file-in-project
-                        full-ack
                         gist
                         go-mode
                         ido-completing-read+
                         ido-vertical-mode
+                        inf-clojure
                         inf-ruby
-                        json
                         json-mode
+                        json-reformat
                         magit
                         magit-gh-pulls
                         markdown-mode
                         maxframe
-                        nginx-mode
                         paredit
-                        python
-                        enh-ruby-mode
-                        puppet-mode
-                        robe
+                        rust-mode
                         scratch
                         slime
                         smartparens
@@ -66,5 +62,12 @@
   (require 'yaml-mode)
   (require 'ido-vertical-mode)
   (require 'auto-complete-config)
-  (require 'smartparens-config)
+  (require 'rust-mode)
   (ac-config-default))
+
+(add-hook 'rust-mode-hook 'cargo-minor-mode)
+(use-package smartparens
+  :ensure smartparens
+  :hook (enh-ruby-mode ruby-mode python-mode elisp markdown-mode)
+  :config
+  (require 'smartparens-config))
