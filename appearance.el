@@ -3,7 +3,7 @@
 
 
 ;; Set default font
-(setq my-font (cond ((window-system) "IBM Plex Mono")
+(setq my-font (cond ((window-system) "Menlo")
                     ("Monospace")))
 (set-face-attribute 'default nil :family my-font :height 140)
 (set-frame-font (concat my-font "-14"))
