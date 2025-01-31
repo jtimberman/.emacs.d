@@ -1,19 +1,15 @@
 ;;
 ;; Switch between Solarized Light and Dark
 ;;
-
 (defun toggle-solarized ()
   "Toggles between solarized light and dark."
   (interactive)
   (if (eq (frame-parameter (next-frame) 'background-mode) 'dark)
       (load-theme 'solarized-light)
     (load-theme 'solarized-dark)))
-
-
 ;;
 ;; Auto-indent on Paste
 ;;
-
 (dolist (command '(yank yank-pop))
   (eval `(defadvice ,command (after indent-region activate)
            (and (not current-prefix-arg)
@@ -26,12 +22,10 @@
                                                      plain-tex-mode))
                 (let ((mark-even-if-inactive transient-mark-mode))
                   (indent-region (region-beginning) (region-end) nil))))))
-
-
 ;;
 ;; Move lines
 ;; - from http://www.emacswiki.org/emacs/MoveLine
-
+;;
 (defun move-line (n)
   "Move the current line up or down by N lines."
   (interactive "p")
@@ -58,11 +52,9 @@
 (global-set-key (kbd "M-<up>") 'move-line-up)
 (global-set-key (kbd "M-<down>") 'move-line-down)
 
-
 ;;
 ;; Duplicate Line
 ;;
-
 (defun duplicate-line()
   (interactive)
   (move-beginning-of-line 1)
@@ -71,58 +63,48 @@
   (newline)
   (yank))
 
-
 ;;
 ;; Align Equal Signs
 ;; corrected form from:
 ;;   http://stackoverflow.com/questions/3633120/emacs-hotkey-to-align-equal-signs
+;;
 (defun align-equal-signs (begin end)
   "Align region to equal signs"
   (interactive "r")
   (align-regexp begin end "\\(\\s-*\\)=" 1 1 ))
-
 ;;
 ;; Yank Pop Forwards
 ;;
-
 (defun yank-pop-forwards (arg)
   (interactive "p")
   (yank-pop (- arg)))
-
-
 ;;
 ;; Window Switching
 ;;
-
 (defun other-window-reverse ()
   "Switch to the previous window"
   (interactive)
   (other-window -1))
-
-
 ;;
 ;; Window Re-sizing
 ;;
-
 (defun enlarge-window-down  () (interactive) (enlarge-window 1))
 (defun enlarge-window-up    () (interactive) (enlarge-window -1))
 (defun enlarge-window-left  () (interactive) (enlarge-window -1 t))
 (defun enlarge-window-right () (interactive) (enlarge-window 1 t))
-
+;;
 ;;; Stefan Monnier <foo at acm.org>. It is the opposite of
 ;;; fill-paragraph. Takes a multi-line paragraph and makes
 ;;; it into a single line of text.
+;;
 (defun unfill-paragraph ()
   (interactive)
   (let ((fill-column (point-max)))
     (fill-paragraph nil)))
-
-
 ;;
 ;; Window Swapping
 ;; - from https://gist.github.com/287633
 ;;
-
 (defun swap-with (dir)
   (interactive)
   (let ((other-window (windmove-find-other-window dir)))
@@ -143,66 +125,9 @@
 (defun swap-with-right () (interactive) (swap-with 'right))
 
 ;;
-;; Helpers for confluence mode
-;;
-;; Unsure whether I'll ever use this again...
-;;
-;; (defun wiki-corp()
-;;   (interactive)
-;;   (setq
-;;    confluence-url "https://DOMAIN/rpc/xmlrpc"
-;;    confluence-default-space-alist (list (cons confluence-url "CORP"))))
-
-;; Confluence mode with sane longlines
-(autoload 'confluence-get-page "confluence" nil t)
-
-(eval-after-load "confluence"
-  '(progn
-     (require 'longlines)
-     (progn
-       (add-hook 'confluence-mode-hook 'longlines-mode)
-       (add-hook 'confluence-before-save-hook 'longlines-before-revert-hook)
-       (add-hook 'confluence-before-revert-hook 'longlines-before-revert-hook)
-       (add-hook 'confluence-mode-hook '(lambda () (local-set-key "\C-j" 'confluence-newline-and-indent))))))
-
-(autoload 'longlines-mode "longlines" "LongLines Mode." t)
-
-(eval-after-load "longlines"
-  '(progn
-     (defvar longlines-mode-was-active nil)
-     (make-variable-buffer-local 'longlines-mode-was-active)
-
-     (defun longlines-suspend ()
-       (if longlines-mode
-           (progn
-             (setq longlines-mode-was-active t)
-             (longlines-mode 0))))
-
-     (defun longlines-restore ()
-       (if longlines-mode-was-active
-           (progn
-             (setq longlines-mode-was-active nil)
-             (longlines-mode 1))))
-
-     ;; longlines doesn't play well with ediff, so suspend it during diffs
-     (defadvice ediff-make-temp-file (before make-temp-file-suspend-ll
-                                             activate compile preactivate)
-       "Suspend longlines when running ediff."
-       (with-current-buffer (ad-get-arg 0)
-         (longlines-suspend)))
-
-     (add-hook 'ediff-cleanup-hook
-               '(lambda ()
-                  (dolist (tmp-buf (list ediff-buffer-A
-                                         ediff-buffer-B
-                                         ediff-buffer-C))
-                    (if (buffer-live-p tmp-buf)
-                        (with-current-buffer tmp-buf
-                          (longlines-restore))))))))
-
-
 ;; From Jim Weirich; Thanks Jim!
 ;; https://github.com/jimweirich/emacs-setup-esk
+;;
 (defconst jw-eval-buffer-commands
   '(("js" . "/usr/local/bin/node")
     ("rb" . "/Users/jtimberman/.rbenv/shims/ruby")
