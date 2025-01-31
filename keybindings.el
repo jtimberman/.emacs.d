@@ -1,7 +1,14 @@
+;; Define keybindings by default that are not associated with any
+;; specific modes, modules, or packages. Customizations and bindings
+;; for such will be wherever those are installed.
+;;
+;; Some keybindings here are for functions defined within this
+;; configuration, however!
+;;
 ;; http://www.emacswiki.org/emacs/AutoIndentation works in most modes
 (define-key global-map (kbd "RET") 'newline-and-indent)
 
-;; Let's not make assumptions on macOS that I don't like :)
+;; Let's not make assumptions on macOS about modifier keys
 (when (eq system-type 'darwin)
   (setq
    mac-command-modifier 'super
@@ -9,7 +16,6 @@
    mac-control-modifier 'control
    mac-function-modifier 'hyper))
 
-(keymap-global-set "M-x" 'smex)
 (keymap-global-set "C-c C-c M-x" 'execute-extended-command)
 (keymap-global-set "C-x C-k" 'kill-buffer)
 (keymap-global-set "M-Y" 'yank-pop-forwards)
@@ -31,7 +37,8 @@
 (keymap-global-set "s-<left>" 'beginning-of-line)
 (keymap-global-set "s-<right>" 'end-of-line)
 
-;; Page up and page down work like we expect. Why is up down and down up? Because macOS.
+;; Page up and page down work like we expect. Why is up down and down
+;; up? Because macOS.
 (keymap-global-set "H-<up>" 'scroll-down)
 (keymap-global-set "H-<down>" 'scroll-up)
 
