@@ -20,12 +20,15 @@
   (add-hook mode (lambda() (display-line-numbers-mode 0))))
 
 ;; Set default font
-(setq my-font (cond ((window-system) "Menlo")
+(setq my-font (cond ((window-system) "BlexMono Nerd Font")
                     ("Monospace")))
 (set-face-attribute 'default nil :family my-font :height 140)
 (set-frame-font (concat my-font "-14"))
 
-;; Configure a nide modeline with doom
+;; Configure a nice modeline with doom
+;; https://github.com/doomemacs/doomemacs/issues/724
+;; M-x all-the-icons-install-fonts
+;; M-x nerd-icons-install-fonts
 (setup (:package all-the-icons))
 (setup (when (not (string-equal system-type "windows-nt"))
          (:package doom-modeline)
