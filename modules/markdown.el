@@ -1,4 +1,5 @@
-(setup (:package markdown-mode))
+(use-package markdown-mode
+  :hook (visual-line-mode))
 
 (setq auto-mode-alist (cons '("\\.md" . gfm-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.markdown" . gfm-mode) auto-mode-alist))

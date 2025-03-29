@@ -1,10 +1,9 @@
 ;;
 ;; This configuration defines various aspects of editor and user behavior
 ;;
-;; Default tab-width of 2 spaces
-(setq-default tab-width 2)
-(setq standard-indent 2)
-
+(electric-pair-mode) ;; auto complete brackets
+(setq-default tab-width 2) ;; Default tab-width of 2 spaces
+(setq standard-indent 2) ;; Default tab-width of 2 spaces
 (setq-default indent-tabs-mode nil) ;; Always indent with spaces
 (fset 'yes-or-no-p 'y-or-n-p) ;; Answer yes/no questions by typing y/n
 (setq ring-bell-function 'ignore) ;; No visual bell please
@@ -22,58 +21,55 @@
 (server-start) ;; Start Emacs server
 
 ;; wrap-region
-(require 'wrap-region)
-(wrap-region-global-mode t)
-(wrap-region-add-wrapper "`" "`")
+(use-package wrap-region
+  :config
+  (wrap-region-global-mode t)
+  (wrap-region-add-wrapper "`" "`"))
 
-;; zomg https://gist.github.com/kevsmith/9391287
-;; is this necessary? Or can we use x-select-enable-clipboard?
-;; e.g., `(setq x-select-enable-clipboard t)`
 (setq x-select-enable-clipboard t)
-;; (setq interprogram-cut-function
-;;       (lambda (text &optional push)
-;;         (let* ((process-connection-type nil)
-;;                (pbproxy (start-process "pbcopy" "pbcopy" "/usr/bin/pbcopy")))
-;;           (process-send-string pbproxy text)
-;;           (process-send-eof pbproxy))))
-;; (setq interprogram-paste-function
-;;       (lambda ()
-;;         (shell-command-to-string "pbpaste")))
-
-
 ;;
 ;; Use ivy as the completion and M-x framework
 ;;
-(setup (:package counsel)
-  (ivy-mode)
-  (:option ivy-use-virtual-buffers t
-           ivy-re-builders-alist '((t . ivy--regex-ignore-order))
-           ivy-count-format "%d/%d ")
-  (:global "C-s" swiper
-           "s-f" swiper
-           "C-x C-f" counsel-find-file
-           "C-x C-b" counsel-switch-buffer
-           "M-x" counsel-M-x))
+(use-package ivy
+  :custom
+  (ivy-count-format "(%d/%d) ")
+  (ivy-use-virtual-buffers t)
+  (ivy-re-builders-alist '((t . ivy--regex-ignore-order)))
+  :config (ivy-mode))
 
-(setup (:package ivy-rich)
-  (ivy-rich-mode))
+(use-package counsel
+  :after ivy
+  :config (counsel-mode)
+  :bind (("C-s" . swiper)
+         ("s-f" . swiper)
+         ("C-x C-f" . counsel-find-file)
+         ("C-x C-b" . counsel-switch-buffer)
+         ("M-x" . counsel-M-x)))
+
+(use-package ivy-rich
+  :config (ivy-rich-mode))
 
 ;; https://projectile.mx/
-(setup (:package projectile)
-  (projectile-mode +1)
-  (:bind "s-p" projectile-command-map
-         "C-c p" projectile-command-map))
+(use-package projectile
+  :config (projectile-mode +1)
+  :bind (("s-p" . projectile-command-map)
+         ("C-c p" . projectile-command-map)))
 
 ;; counsel-projectile integrates projectile with
 ;; counsel's browse-and-select UI
-(setup (:package counsel-projectile))
+(use-package counsel-projectile)
 
-(setup (:package which-key)
-  (which-key-mode)
-  (:option which-key-idle-delay 1.0))
+(which-key-mode 1)
+(which-key-setup-side-window-right-bottom)
 
 ;; https://github.com/Alexander-Miller/treemacs
-(setup (:package treemacs treemacs-projectile treemacs-magit)
-  (:global "M-0" treemacs-select-window
-           "M-o" ace-window ;; treemacs brings ace-window as a dependency
-           "s-," treemacs))
+(use-package treemacs
+  :bind (("M-0" . treemacs-select-window)
+         ("M-o" . ace-window)
+         ("s-," . treemacs)))
+
+(use-package treemacs-projectile)
+(use-package treemacs-magit)
+
+(use-package dired-preview
+  :hook (dired-preview-global-mode))

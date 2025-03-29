@@ -12,11 +12,12 @@
 (setq inhibit-startup-message t)
 (setq-default frame-title-format "%b (%f)")
 
-;; Turn on lnie numbers everywhere, except...
+;; Turn on line numbers everywhere, except...
 (global-display-line-numbers-mode 1)
 (dolist (mode '(term-mode-hook
                 treemacs-mode-hook
-                eshell-mode-hook))
+                eshell-mode-hook
+                vterm-mode-hook))
   (add-hook mode (lambda() (display-line-numbers-mode 0))))
 
 ;; Set default font
@@ -29,19 +30,20 @@
 ;; https://github.com/doomemacs/doomemacs/issues/724
 ;; M-x all-the-icons-install-fonts
 ;; M-x nerd-icons-install-fonts
-(setup (:package all-the-icons))
-(setup (when (not (string-equal system-type "windows-nt"))
-         (:package doom-modeline)
-         (doom-modeline-mode t)))
+(use-package all-the-icons)
+(use-package doom-modeline
+  :init (doom-modeline-mode 1))
 
-;; install and configure a nice theme
-(setup (:package solarized-theme))
-(setq solarized-use-variable-pitch nil)
-(setq solarized-scale-org-headlines nil)
-(load-theme 'solarized-light t)
+(use-package solarized-theme
+  :config
+  (load-theme 'solarized-light t)
+  (setq solarized-use-variable-pitch nil)
+  (setq solarized-scale-org-headlines nil))
 
-;; Show trailing whitespace
+(set-cursor-color "darkorange")
+
 (setq-default show-trailing-whitespace t)
+
 (remove-hook 'before-save-hook 'delete-trailing-whitespace)
 
 (dolist (hook '(special-mode-hook

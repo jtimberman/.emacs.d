@@ -3,3 +3,4 @@
 (setq org-src-fontify-natively t)
 (setq org-startup-folded t)
 (setq org-startup-truncated nil)
+(add-hook 'org-mode-hook 'visual-line-mode)

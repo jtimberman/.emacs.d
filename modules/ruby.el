@@ -1,10 +1,6 @@
-(setup (:package enh-ruby-mode inf-ruby))
-
-(setq enh-ruby-bounce-deep-indent t)
-(setq enh-ruby-hanging-brace-indent-level 2)
-(setq ruby-deep-indent-paren nil)
-
-(autoload 'enh-ruby-mode "enh-ruby-mode" "Major mode for ruby files" t)
+(use-package enh-ruby-mode
+  :defer t)
+(use-package inf-ruby)
 
 (add-to-list 'auto-mode-alist '("\\.rb$" . enh-ruby-mode))
 (add-to-list 'interpreter-mode-alist '("ruby" . enh-ruby-mode))

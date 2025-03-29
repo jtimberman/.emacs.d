@@ -51,7 +51,6 @@
 
 (global-set-key (kbd "M-<up>") 'move-line-up)
 (global-set-key (kbd "M-<down>") 'move-line-down)
-
 ;;
 ;; Duplicate Line
 ;;
@@ -62,7 +61,6 @@
   (yank)
   (newline)
   (yank))
-
 ;;
 ;; Align Equal Signs
 ;; corrected form from:
@@ -93,14 +91,21 @@
 (defun enlarge-window-left  () (interactive) (enlarge-window -1 t))
 (defun enlarge-window-right () (interactive) (enlarge-window 1 t))
 ;;
-;;; Stefan Monnier <foo at acm.org>. It is the opposite of
-;;; fill-paragraph. Takes a multi-line paragraph and makes
-;;; it into a single line of text.
+;; This makes M-q aka ~fill-paragraph~ be a toggle; source
+;; https://endlessparentheses.com/fill-and-unfill-paragraphs-with-a-single-key.html
 ;;
-(defun unfill-paragraph ()
+(defun endless/fill-or-unfill ()
+  "Like `fill-paragraph', but unfill if used twice."
   (interactive)
-  (let ((fill-column (point-max)))
-    (fill-paragraph nil)))
+  (let ((fill-column
+         (if (eq last-command 'endless/fill-or-unfill)
+             (progn (setq this-command nil)
+                    (point-max))
+           fill-column)))
+    (call-interactively #'fill-paragraph)))
+
+(global-set-key [remap fill-paragraph]
+                #'endless/fill-or-unfill)
 ;;
 ;; Window Swapping
 ;; - from https://gist.github.com/287633
@@ -123,7 +128,6 @@
 (defun swap-with-up    () (interactive) (swap-with 'up))
 (defun swap-with-left  () (interactive) (swap-with 'left))
 (defun swap-with-right () (interactive) (swap-with 'right))
-
 ;;
 ;; From Jim Weirich; Thanks Jim!
 ;; https://github.com/jimweirich/emacs-setup-esk

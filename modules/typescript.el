@@ -1,1 +1,0 @@
-(setup (:package typescript-mode))
