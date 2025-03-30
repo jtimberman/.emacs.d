@@ -72,4 +72,4 @@
 (use-package treemacs-magit)
 
 (use-package dired-preview
-  :hook (dired-preview-global-mode))
+  :hook (after-init . dired-preview-global-mode))

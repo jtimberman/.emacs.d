@@ -23,8 +23,8 @@
 ;; Set default font
 (setq my-font (cond ((window-system) "BlexMono Nerd Font")
                     ("Monospace")))
-(set-face-attribute 'default nil :family my-font :height 140)
-(set-frame-font (concat my-font "-14"))
+(set-face-attribute 'default nil :family my-font :height 160)
+(set-frame-font (concat my-font "-16"))
 
 ;; Configure a nice modeline with doom
 ;; https://github.com/doomemacs/doomemacs/issues/724

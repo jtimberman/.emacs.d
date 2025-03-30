@@ -2,12 +2,12 @@
 (require 'use-package-ensure)
 (setq use-package-always-ensure t)
 
-(add-to-list 'package-archives
-             '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+;;(add-to-list 'package-archives
+;;             '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 
 ;; Melpa Stable only for now, but if we want to use unstable we have
 ;; it available:
-;;(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
 ;; Allegedly this will no longer be required in Emacs 30, but that's
 ;; not the case quite yet?
@@ -27,7 +27,9 @@
 (load-dir (concat user-emacs-directory "vendor/"))
 (load-dir (concat user-emacs-directory "modules/"))
 
-(load-file (concat user-emacs-directory "work.el"))
+(defvar work-config (concat user-emacs-directory "work.el"))
+(when (file-exists-p work-config)
+  (load-file work-config))
 
 ;; Custom variables file
 (setq custom-file "~/.emacs.d/custom.el")
