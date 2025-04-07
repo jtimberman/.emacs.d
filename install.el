@@ -9,3 +9,4 @@
 (use-package scratch)
 (use-package terraform-mode)
 (use-package typescript-mode)
+(use-package yaml-mode)

@@ -16,8 +16,7 @@
 (global-display-line-numbers-mode 1)
 (dolist (mode '(term-mode-hook
                 treemacs-mode-hook
-                eshell-mode-hook
-                vterm-mode-hook))
+                eshell-mode-hook))
   (add-hook mode (lambda() (display-line-numbers-mode 0))))
 
 ;; Set default font
