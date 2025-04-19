@@ -40,7 +40,9 @@
   (setq solarized-scale-org-headlines nil))
 
 (set-cursor-color "darkorange")
+(set-face-attribute 'cursor nil :background "darkorange")
 
+;; manage trailing whitespace settings:
 (setq-default show-trailing-whitespace t)
 
 (remove-hook 'before-save-hook 'delete-trailing-whitespace)

@@ -27,37 +27,40 @@
   (wrap-region-add-wrapper "`" "`"))
 
 (setq x-select-enable-clipboard t)
+
 ;;
-;; Use ivy as the completion and M-x framework
+;; Inspired by https://protesilaos.com/codelog/2024-02-17-emacs-modern-minibuffer-packages/
+;; Replaces previous use of ivy, counsel, etc.
 ;;
-(use-package ivy
-  :custom
-  (ivy-count-format "(%d/%d) ")
-  (ivy-use-virtual-buffers t)
-  (ivy-re-builders-alist '((t . ivy--regex-ignore-order)))
-  :config (ivy-mode))
+(use-package vertico
+  :init
+  (vertico-mode)
+  :config
+  (setq vertico-cycle t)
+  (setq vertico-resize nil))
 
-(use-package counsel
-  :after ivy
-  :config (counsel-mode)
-  :bind (("C-s" . swiper)
-         ("s-f" . swiper)
-         ("C-x C-f" . counsel-find-file)
-         ("C-x C-b" . counsel-switch-buffer)
-         ("M-x" . counsel-M-x)))
+(use-package marginalia
+  :after vertico
+  :init
+  (marginalia-mode))
 
-(use-package ivy-rich
-  :config (ivy-rich-mode))
+(use-package orderless
+  :config
+  (setq completion-styles '(orderless)))
 
-;; https://projectile.mx/
-(use-package projectile
-  :config (projectile-mode +1)
-  :bind (("s-p" . projectile-command-map)
-         ("C-c p" . projectile-command-map)))
-
-;; counsel-projectile integrates projectile with
-;; counsel's browse-and-select UI
-(use-package counsel-projectile)
+(use-package consult
+  :ensure t
+  :bind (;; A recursive grep
+         ("M-s M-g" . consult-grep)
+         ;; Search for files names recursively
+         ("M-s M-f" . consult-find)
+         ;; Search through the outline (headings) of the file
+         ("M-s M-o" . consult-outline)
+         ;; Search the current buffer
+         ("M-s M-l" . consult-line)
+         ;; Switch to another buffer, or bookmarked file, or recently
+         ;; opened file.
+         ("M-s M-b" . consult-buffer)))
 
 (which-key-mode 1)
 (which-key-setup-side-window-right-bottom)
@@ -73,3 +76,6 @@
 
 (use-package dired-preview
   :hook (after-init . dired-preview-global-mode))
+
+;; Use ripgrep for rgrep
+(grep-apply-setting 'grep-template "rg --no-heading -H -uu -g <F> <R> <D>")
