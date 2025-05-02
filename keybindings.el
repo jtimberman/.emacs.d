@@ -28,8 +28,12 @@
 (keymap-global-set "C-c t" 'insert-time-string)
 (keymap-global-set "C-c f" 'find-file-in-project)
 (keymap-global-set "C-c F" 'find-grep-dired)
-(keymap-global-set "C-c l" 'toggle-solarized)
 (keymap-global-set "C-c r" 'revert-buffer)
+(keymap-global-set "C-c l"
+                   (lambda ()
+                     (interactive)
+                     (toggle-solarized)
+                     (set-cursor-color "darkorange")))
 
 ;; Command-up, down, left, and right behave like other parts of macOS
 (keymap-global-set "s-<up>" 'beginning-of-buffer)

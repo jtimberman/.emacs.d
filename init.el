@@ -15,8 +15,6 @@
   :init (exec-path-from-shell-initialize))
 
 (load-file (concat user-emacs-directory "install.el"))
-(load-file (concat user-emacs-directory "appearance.el"))
-(load-file (concat user-emacs-directory "behavior.el"))
 (load-file (concat user-emacs-directory "helpers.el"))
 (load-file (concat user-emacs-directory "keybindings.el"))
 
@@ -26,6 +24,9 @@
 
 (load-dir (concat user-emacs-directory "vendor/"))
 (load-dir (concat user-emacs-directory "modules/"))
+
+(load-file (concat user-emacs-directory "behavior.el"))
+(load-file (concat user-emacs-directory "appearance.el"))
 
 (defvar work-config (concat user-emacs-directory "work.el"))
 (when (file-exists-p work-config)

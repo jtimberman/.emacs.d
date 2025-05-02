@@ -1,12 +1,12 @@
 ;;
 ;; This configuration defines various aspects of editor and user behavior
 ;;
-(electric-pair-mode) ;; auto complete brackets
-(setq-default tab-width 2) ;; Default tab-width of 2 spaces
-(setq standard-indent 2) ;; Default tab-width of 2 spaces
-(setq-default indent-tabs-mode nil) ;; Always indent with spaces
-(fset 'yes-or-no-p 'y-or-n-p) ;; Answer yes/no questions by typing y/n
-(setq ring-bell-function 'ignore) ;; No visual bell please
+(electric-pair-mode)
+(setq-default tab-width 2)
+(setq standard-indent 2)
+(setq-default indent-tabs-mode nil)
+(fset 'yes-or-no-p 'y-or-n-p)
+(setq ring-bell-function 'ignore)
 
 ;; Backup directory
 (setq backup-directory-alist
@@ -27,6 +27,9 @@
   (wrap-region-add-wrapper "`" "`"))
 
 (setq x-select-enable-clipboard t)
+
+(use-package toggle-quotes
+  :bind ("C-'" . toggle-quotes))
 
 ;;
 ;; Inspired by https://protesilaos.com/codelog/2024-02-17-emacs-modern-minibuffer-packages/
