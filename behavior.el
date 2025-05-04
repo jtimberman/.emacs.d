@@ -1,7 +1,8 @@
 ;;
 ;; This configuration defines various aspects of editor and user behavior
 ;;
-(electric-pair-mode)
+;; (electric-pair-mode)
+;; enable paredit
 (setq-default tab-width 2)
 (setq standard-indent 2)
 (setq-default indent-tabs-mode nil)
