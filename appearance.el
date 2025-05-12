@@ -29,18 +29,38 @@
 ;; https://github.com/doomemacs/doomemacs/issues/724
 ;; M-x all-the-icons-install-fonts
 ;; M-x nerd-icons-install-fonts
-(use-package all-the-icons)
+;; (use-package all-the-icons)
 (use-package doom-modeline
   :init (doom-modeline-mode 1))
 
-(use-package solarized-theme
-  :config
-  (load-theme 'solarized-light t)
-  (setq solarized-use-variable-pitch nil)
-  (setq solarized-scale-org-headlines nil))
+;; (use-package solarized-theme
+;;   :config
+;;   (load-theme 'solarized-light t)
+;;   (setq solarized-use-variable-pitch nil)
+;;   (setq solarized-scale-org-headlines nil))
 
-(set-cursor-color "darkorange")
-(set-face-attribute 'cursor nil :background "darkorange")
+;; (set-cursor-color "darkorange")
+;; (set-face-attribute 'cursor nil :background "darkorange")
+;; themes I like:
+;; dark
+;;  ef-bio
+;;  ef-owl
+;; light
+;;  ef-melissa-light
+;;  ef-elea-light
+;;
+(use-package ef-themes
+  :config
+  (load-theme 'ef-elea-light t))
+
+(defun my-ef-themes-mode-line ()
+  "Tweak the style of the mode lines."
+  (ef-themes-with-colors
+    (custom-set-faces
+     `(mode-line ((,c :background ,bg-mode-line :foreground ,fg-mode-line :box (:line-width 1 :color ,fg-dim))))
+     `(mode-line-inactive ((,c :box (:line-width 1 :color ,bg-active)))))))
+
+(add-hook 'ef-themes-post-load-hook #'my-ef-themes-mode-line)
 
 ;; manage trailing whitespace settings:
 (setq-default show-trailing-whitespace t)

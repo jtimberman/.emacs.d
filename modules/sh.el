@@ -6,5 +6,4 @@
             (auto-fill-mode -1)
             (setq tab-width 4)))
 
-(setq sh-basic-offset 2
-      sh-indentation 2)
+(setq sh-basic-offset 2)

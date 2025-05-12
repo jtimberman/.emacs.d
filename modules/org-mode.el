@@ -8,6 +8,10 @@
   (setq org-startup-folded t)
   (setq org-startup-truncated nil))
 
+;; export an org mode file as a presentation using Reveal.js
+(use-package ox-reveal)
+(setq org-export-with-broken-links 'mark)
+
 (remove-hook 'org-mode-hook 'electric-indent-mode)
 
 (org-babel-do-load-languages 'org-babel-load-languages
@@ -15,9 +19,6 @@
                                      '((python . t)
                                        (ruby . t)
                                        (perl . t)
-                                       (sh . t))))
+                                       )))
 
-;; export an org mode file as a presentation using Reveal.js
-(use-package ox-reveal)
-(setq org-export-with-broken-links 'mark)
 
