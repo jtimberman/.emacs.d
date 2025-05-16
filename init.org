@@ -2,7 +2,7 @@
 
 What it says on the tin, of course. We're going to start large and break it down.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle "~/.emacs.d/init.el"
 (require 'package)
 (require 'use-package-ensure)
 (setq use-package-always-ensure t)
@@ -389,11 +389,14 @@ See `format-time-string' for FORMAT-STRING, TIME, and UNIVERSAL arguments."
   :mode (("\\.org$" . org-mode))
   :hook (visual-line-mode)
   :config
+  (require 'org-tempo)
   (setq org-edit-src-content-indentation 0)
   (setq org-indent-mode t)
   (setq org-src-fontify-natively t)
   (setq org-startup-folded t)
-  (setq org-startup-truncated nil))
+  (setq org-startup-truncated nil)
+  (add-to-list 'org-modules 'org-tempo)
+  (add-to-list 'org-structure-template-alist '("n" . "NOTES"))
 
 ;; export an org mode file as a presentation using Reveal.js
 (use-package ox-reveal)
