@@ -1,8 +1,16 @@
-# Literate programming: Orgmode Init.el
+#+property: header-args :tangle "init.el"
+#+startup: content indent
+* Literate programming: Orgmode Init.el
 
 What it says on the tin, of course. We're going to start large and break it down.
 
-#+begin_src emacs-lisp :tangle "~/.emacs.d/init.el"
+* Set up packages
+
+First, let's setup the package manager. We're going to:
+
+- Ensure we have loaded the package manager
+- Use Melpa for the package repository
+#+begin_src emacs-lisp
 (require 'package)
 (require 'use-package-ensure)
 (setq use-package-always-ensure t)
@@ -13,12 +21,24 @@ What it says on the tin, of course. We're going to start large and break it down
 ;; Melpa Stable only for now, but if we want to use unstable we have
 ;; it available:
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+#+end_src
 
-;; Allegedly this will no longer be required in Emacs 30, but that's
-;; not the case quite yet?
+* TODO Load the PATH from shell
+
+Allegedly, this package is supposed to load the =PATH= from the user =SHELL=, but it doesn't appear to work in Emacs 30 yet?
+
+I should test and investigate whether this is the case. The point is to have commands from Homebrew and CINC Workstation are available.
+
+#+begin_src emacs-lisp
 (use-package exec-path-from-shell
   :init (exec-path-from-shell-initialize))
-;; install.el
+#+end_src
+
+* Simple package installation
+
+Packages that have no configuration, hooks, etc.
+
+#+begin_src emacs-lisp
 (use-package auto-complete)
 (use-package dockerfile-mode)
 (use-package editorconfig)
@@ -29,19 +49,14 @@ What it says on the tin, of course. We're going to start large and break it down
 (use-package terraform-mode)
 (use-package typescript-mode)
 (use-package yaml-mode)
-;; helpers.el
-;;
-;; Switch between Solarized Light and Dark
-;;
-(defun toggle-solarized ()
-  "Toggles between solarized light and dark."
-  (interactive)
-  (if (eq (frame-parameter (next-frame) 'background-mode) 'dark)
-      (load-theme 'solarized-light)
-    (load-theme 'solarized-dark)))
-;;
-;; Auto-indent on Paste
-;;
+#+end_src
+
+* Helper functions
+
+These helper functions are for later use.
+**  Auto-indent on Paste
+
+#+begin_src emacs-lisp
 (dolist (command '(yank yank-pop))
   (eval `(defadvice ,command (after indent-region activate)
            (and (not current-prefix-arg)
@@ -51,13 +66,16 @@ What it says on the tin, of course. We're going to start large and break it down
                                                      rspec-mode      python-mode
                                                      c-mode          c++-mode
                                                      objc-mode       latex-mode
-                                                     plain-tex-mode))
+                                                     plain-tex-mode  enh-ruby-mode))
                 (let ((mark-even-if-inactive transient-mark-mode))
                   (indent-region (region-beginning) (region-end) nil))))))
-;;
-;; Move lines
-;; - from http://www.emacswiki.org/emacs/MoveLine
-;;
+#+end_src
+
+** Move lines
+
+From http://www.emacswiki.org/emacs/MoveLine
+
+#+begin_src emacs-lisp
 (defun move-line (n)
   "Move the current line up or down by N lines."
   (interactive "p")
@@ -83,9 +101,11 @@ What it says on the tin, of course. We're going to start large and break it down
 
 (global-set-key (kbd "M-<up>") 'move-line-up)
 (global-set-key (kbd "M-<down>") 'move-line-down)
-;;
-;; Duplicate Line
-;;
+#+end_src
+
+** Duplicate Line
+
+#+begin_src emacs-lisp
 (defun duplicate-line()
   (interactive)
   (move-beginning-of-line 1)
@@ -93,39 +113,51 @@ What it says on the tin, of course. We're going to start large and break it down
   (yank)
   (newline)
   (yank))
-;;
-;; Align Equal Signs
-;; corrected form from:
-;;   http://stackoverflow.com/questions/3633120/emacs-hotkey-to-align-equal-signs
-;;
+#+end_src
+
+** Align Equal Signs
+
+Corrected form from:http://stackoverflow.com/questions/3633120/emacs-hotkey-to-align-equal-signs
+
+#+begin_src emacs-lisp
 (defun align-equal-signs (begin end)
   "Align region to equal signs"
   (interactive "r")
   (align-regexp begin end "\\(\\s-*\\)=" 1 1 ))
-;;
-;; Yank Pop Forwards
-;;
+#+end_src
+
+** Yank Pop Forwards
+
+#+begin_src emacs-lisp
 (defun yank-pop-forwards (arg)
   (interactive "p")
   (yank-pop (- arg)))
-;;
-;; Window Switching
-;;
+#+end_src
+
+** Window Switching
+
+#+begin_src emacs-lisp
 (defun other-window-reverse ()
   "Switch to the previous window"
   (interactive)
   (other-window -1))
-;;
-;; Window Re-sizing
-;;
+#+end_src
+
+** Window Re-sizing
+
+#+begin_src emacs-lisp
 (defun enlarge-window-down  () (interactive) (enlarge-window 1))
 (defun enlarge-window-up    () (interactive) (enlarge-window -1))
 (defun enlarge-window-left  () (interactive) (enlarge-window -1 t))
 (defun enlarge-window-right () (interactive) (enlarge-window 1 t))
-;;
-;; This makes M-q aka ~fill-paragraph~ be a toggle; source
-;; https://endlessparentheses.com/fill-and-unfill-paragraphs-with-a-single-key.html
-;;
+#+end_src
+
+** Toggle fill-paragraph
+
+This makes M-q aka ~fill-paragraph~ be a toggle:
+- https://endlessparentheses.com/fill-and-unfill-paragraphs-with-a-single-key.html
+
+#+begin_src emacs-lisp
 (defun endless/fill-or-unfill ()
   "Like `fill-paragraph', but unfill if used twice."
   (interactive)
@@ -138,10 +170,13 @@ What it says on the tin, of course. We're going to start large and break it down
 
 (global-set-key [remap fill-paragraph]
                 #'endless/fill-or-unfill)
-;;
-;; Window Swapping
-;; - from https://gist.github.com/287633
-;;
+#+end_src
+
+** Window Swapping
+
+- from https://gist.github.com/287633
+
+#+begin_src emacs-lisp
 (defun swap-with (dir)
   (interactive)
   (let ((other-window (windmove-find-other-window dir)))
@@ -160,10 +195,13 @@ What it says on the tin, of course. We're going to start large and break it down
 (defun swap-with-up    () (interactive) (swap-with 'up))
 (defun swap-with-left  () (interactive) (swap-with 'left))
 (defun swap-with-right () (interactive) (swap-with 'right))
-;;
-;; From Jim Weirich; Thanks Jim!
-;; https://github.com/jimweirich/emacs-setup-esk
-;;
+#+end_src
+
+** From Jim Weirich; Thanks Jim!
+
+https://github.com/jimweirich/emacs-setup-esk
+
+#+begin_src emacs-lisp
 (defconst jw-eval-buffer-commands
   '(("js" . "/usr/local/bin/node")
     ("rb" . "/Users/jtimberman/.rbenv/shims/ruby")
@@ -210,27 +248,37 @@ What it says on the tin, of course. We're going to start large and break it down
   (interactive "P")
   (cond ((null n) (jw-eval-buffer))
         (t (jw-clear-eval-buffer)))  )
-;; end helpers
+#+end_src
 
-;; keybindings.el
-;; Define keybindings by default that are not associated with any
-;; specific modes, modules, or packages. Customizations and bindings
-;; for such will be wherever those are installed.
-;;
-;; Some keybindings here are for functions defined within this
-;; configuration, however!
-;;
-;; http://www.emacswiki.org/emacs/AutoIndentation works in most modes
+* Keybindings
+
+Define keybindings by default that are not associated with any specific modes, modules, or packages. Customizations and bindings for such will be wherever those are installed.
+
+Some keybindings here are for functions defined within this configuration, however!
+
+** AutoIndentation
+
+http://www.emacswiki.org/emacs/AutoIndentation works in most modes
+
+#+begin_src emacs-lisp
 (define-key global-map (kbd "RET") 'newline-and-indent)
+#+end_src
 
-;; Let's not make assumptions on macOS about modifier keys
+** macOS modifiers
+
+Let's not make assumptions on macOS about modifier keys
+#+begin_src emacs-lisp
 (when (eq system-type 'darwin)
   (setq
    mac-command-modifier 'super
    mac-option-modifier 'meta
    mac-control-modifier 'control
    mac-function-modifier 'hyper))
+#+end_src
 
+** General keybindings
+
+#+begin_src emacs-lisp
 (keymap-global-set "C-c C-c M-x" 'execute-extended-command)
 (keymap-global-set "C-x C-k" 'kill-buffer)
 (keymap-global-set "M-Y" 'yank-pop-forwards)
@@ -244,20 +292,20 @@ What it says on the tin, of course. We're going to start large and break it down
 (keymap-global-set "C-c f" 'find-file-in-project)
 (keymap-global-set "C-c F" 'find-grep-dired)
 (keymap-global-set "C-c r" 'revert-buffer)
-(keymap-global-set "C-c l"
-                   (lambda ()
-                     (interactive)
-                     (toggle-solarized)
-                     (set-cursor-color "darkorange")))
+#+end_src
 
-;; Command-up, down, left, and right behave like other parts of macOS
+** macOS movement
+
+Command-up, down, left, and right behave like other parts of macOS
+
+Page up and page down work like we expect. Why is up down and down up? Because macOS.
+
+#+begin_src emacs-lisp
 (keymap-global-set "s-<up>" 'beginning-of-buffer)
 (keymap-global-set "s-<down>" 'end-of-buffer)
 (keymap-global-set "s-<left>" 'beginning-of-line)
 (keymap-global-set "s-<right>" 'end-of-line)
 
-;; Page up and page down work like we expect. Why is up down and down
-;; up? Because macOS.
 (keymap-global-set "H-<up>" 'scroll-down)
 (keymap-global-set "H-<down>" 'scroll-up)
 
@@ -269,16 +317,15 @@ What it says on the tin, of course. We're going to start large and break it down
 (keymap-global-set "s-w" 'delete-frame)
 (keymap-global-set "s-n" 'make-frame)
 (keymap-global-set "s-z" 'undo)
-;; end keybindings
+#+end_src
 
-(defun load-dir (dir)
-  (add-to-list 'load-path dir)
-  (mapc 'load (directory-files dir nil "^[^#].*el$")))
+* Insert time string
 
-;; insert time string (vendored)
-;;; -*- coding: utf-8; -*-
-;;; insert-time-string.el --- Insert the current time.
+Kevin Rodgers has this delightful bit to insert an ISO time string posted to the GNU Emacs mailing list in 2010.
 
+https://lists.gnu.org/archive/html/help-gnu-emacs/2010-02/msg00575.html
+
+#+begin_src emacs-lisp
 ;; Copyright © 2010 Kevin Rodgers
 
 ;; Author: Kevin Rodgers <kevin.d.rodgers@gmail.com>
@@ -344,27 +391,45 @@ By default, insert the local time; with a prefix arg, insert the Universal Time.
 See `format-time-string' for FORMAT-STRING, TIME, and UNIVERSAL arguments."
   (interactive
    (list (cdr (assoc (completing-read (format "Format (%s): "
-					      insert-time-string-default-format)
-				      insert-time-string-format-alist
-				      nil t nil nil
-				      insert-time-string-default-format)
-		     insert-time-string-format-alist))
-	 (current-time)
-	 current-prefix-arg))
+					                                    insert-time-string-default-format)
+				                              insert-time-string-format-alist
+				                              nil t nil nil
+				                              insert-time-string-default-format)
+		                 insert-time-string-format-alist))
+	       (current-time)
+	       current-prefix-arg))
   (insert (format-time-string format-string time universal)))
+#+end_src
 
-;;; insert-time-string.el ends here
+#+begin_src emacs-lisp
+(setq insert-time-string-default-format "iso-8601-date")
+#+end_src
+* Modules and Languages
+** Lisp
 
-;; end insert time string (vendored)
+Emacs lisp and friends want paredit mode
 
-(load-dir (concat user-emacs-directory "modules/"))
-;; modules
+#+begin_src emacs-lisp
+(autoload 'enable-paredit-mode "paredit"
+  "Turn on pseudo-structural editing of Lisp code."
+  t)
+(add-hook 'emacs-lisp-mode-hook       'enable-paredit-mode)
+(add-hook 'lisp-mode-hook             'enable-paredit-mode)
+(add-hook 'lisp-interaction-mode-hook 'enable-paredit-mode)
+(add-hook 'scheme-mode-hook           'enable-paredit-mode)
+#+end_src
+
+** JSON
+#+begin_src emacs-lisp
 (use-package json-mode
   :defer t)
 (use-package json-reformat)
 
 (setq auto-mode-alist (cons '("\\.json" . json-mode) auto-mode-alist))
+#+end_src
 
+** Markdown
+#+begin_src emacs-lisp
 (use-package markdown-mode
   :hook (visual-line-mode))
 
@@ -374,17 +439,22 @@ See `format-time-string' for FORMAT-STRING, TIME, and UNIVERSAL arguments."
 (setq auto-mode-alist (cons '("\\.text" . gfm-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.txt" . gfm-mode) auto-mode-alist))
 
-(remove-hook 'text-mode-hook 'turn-on-auto-fill) ;; auto-fill-mode, just say no
+(remove-hook 'text-mode-hook 'turn-on-auto-fill)
+#+end_src
 
-;; https://github.com/eki3z/mise.el
+** Mise
+
+- https://github.com/eki3z/mise.el
+
+#+begin_src emacs-lisp
 (use-package mise
   :defer t
   :config (global-mise-mode))
+#+end_src
 
-(setq org-directory "~/Documents/org")
-(setq org-mobile-inbox-for-pull "~/Documents/org/flagged.org")
-(setq org-mobile-directory "~/CloudDocs/MobileOrg")
-
+** Org Mode
+*** Setup org-mode
+#+begin_src emacs-lisp
 (use-package org
   :mode (("\\.org$" . org-mode))
   :hook (visual-line-mode)
@@ -395,25 +465,65 @@ See `format-time-string' for FORMAT-STRING, TIME, and UNIVERSAL arguments."
   (setq org-src-fontify-natively t)
   (setq org-startup-folded t)
   (setq org-startup-truncated nil)
+  (setq org-directory "~/Documents/org")
+  (setq org-mobile-inbox-for-pull "~/Documents/org/flagged.org")
+  (setq org-mobile-directory "~/CloudDocs/MobileOrg")
   (add-to-list 'org-modules 'org-tempo)
-  (add-to-list 'org-structure-template-alist '("n" . "NOTES"))
+  (add-to-list 'org-structure-template-alist '("n" . "NOTES")))
+#+end_src
 
-;; export an org mode file as a presentation using Reveal.js
+*** Presentations with org
+
+This package will export an org mode file as a presentation using Reveal.js
+
+- https://github.com/yjwen/org-reveal
+#+begin_src emacs-lisp
 (use-package ox-reveal)
 (setq org-export-with-broken-links 'mark)
 
-(remove-hook 'org-mode-hook 'electric-indent-mode)
+(keymap-global-set "C-c s"
+                   (lambda () (interactive)
+                     (insert "#+REVEAL: split:t")))
+#+end_src
 
+Using this is pretty sweet; the following goes at the top of the org file:
+
+#+begin_src org :tangle no
+:REVEAL_PROPERTIES:
+#+REVEAL_ROOT: https://cdn.jsdelivr.net/npm/reveal.js
+#+REVEAL_REVEAL_JS_VERSION: 4
+#+REVEAL_THEME: simple
+#+OPTIONS: timestamp:nil toc:nil num:nil
+:END:
+#+TITLE: A cool title!
+#+AUTHOR: Your name
+#+DATE: 2025 / 05
+#+end_src
+
+Then, export it as Reveal and open in the Browser with C-c C-e R B
+
+Add speaker notes to a slide with =#+BEGIN_NOTES / #+END_NOTES= blocks.
+
+*** Babel these languages in Org
+
+#+begin_src emacs-lisp
 (org-babel-do-load-languages 'org-babel-load-languages
                              (append org-babel-load-languages
                                      '((python . t)
                                        (ruby . t)
                                        (perl . t)
+                                       (shell . t)
                                        )))
+#+end_src
 
+** Ruby!
 
+Ruby is my favorite programming language, so let's treat it right.
+
+#+begin_src emacs-lisp
 (use-package enh-ruby-mode
   :defer t)
+
 (use-package inf-ruby)
 
 (add-to-list 'auto-mode-alist '("\\.rb$" . enh-ruby-mode))
@@ -422,10 +532,8 @@ See `format-time-string' for FORMAT-STRING, TIME, and UNIVERSAL arguments."
 (add-to-list 'auto-mode-alist '("Berksfile$" . enh-ruby-mode))
 (add-to-list 'auto-mode-alist '("Capfile$" . enh-ruby-mode))
 (add-to-list 'auto-mode-alist '("Cheffile$" . enh-ruby-mode))
-(add-to-list 'auto-mode-alist '("Collanderfile$" . enh-ruby-mode))
 (add-to-list 'auto-mode-alist '("Gemfile$" . enh-ruby-mode))
 (add-to-list 'auto-mode-alist '("Guardfile$" . enh-ruby-mode))
-(add-to-list 'auto-mode-alist '("Kitchenfile$" . enh-ruby-mode))
 (add-to-list 'auto-mode-alist '("Procfile$" . enh-ruby-mode))
 (add-to-list 'auto-mode-alist '("Rantfile$" . enh-ruby-mode))
 (add-to-list 'auto-mode-alist '("Thorfile$" . enh-ruby-mode))
@@ -433,14 +541,30 @@ See `format-time-string' for FORMAT-STRING, TIME, and UNIVERSAL arguments."
 
 (add-hook 'enh-ruby-mode
           (lambda () (auto-fill-mode -1)))
+#+end_src
 
+Auto-complete =do..end= blocks.
+
+#+begin_src emacs-lisp
+(use-package ruby-end
+  :hook (enh-ruby-mode . ruby-end-mode))
+#+end_src
+
+** Rust
+
+It's cool but I'm not using it much yet, Let's make sure we have it, though.
+
+#+begin_src emacs-lisp
 (use-package rust-mode
   :defer t
   :hook (rustfmt-enable-on-save . cargo-minor-mode)
-  :bind ("C-c C-f" . fustfmt-format-buffer))
+  :bind ("C-c C-f" . rustfmt-format-buffer))
 
 (use-package cargo-mode)
+#+end_src
 
+** Shell
+#+begin_src emacs-lisp
 (add-to-list 'auto-mode-alist '("\*\\.zsh$" . sh-mode))
 (add-to-list 'auto-mode-alist '("\\.zshrc" . sh-mode))
 
@@ -450,7 +574,10 @@ See `format-time-string' for FORMAT-STRING, TIME, and UNIVERSAL arguments."
             (setq tab-width 4)))
 
 (setq sh-basic-offset 2)
+#+end_src
 
+** SSH
+#+begin_src emacs-lisp
 (use-package ssh-config-mode
   :vc (:url "https://github.com/peterhoeg/ssh-config-mode-el.git"
             :rev :newest)
@@ -461,7 +588,11 @@ See `format-time-string' for FORMAT-STRING, TIME, and UNIVERSAL arguments."
 (add-to-list 'auto-mode-alist '("/sshd?_config\\(\\.d/.*\\.conf\\)?\\'"  . ssh-config-mode))
 (add-to-list 'auto-mode-alist '("/known_hosts\\'"       . ssh-known-hosts-mode))
 (add-to-list 'auto-mode-alist '("/authorized_keys2?\\'" . ssh-authorized-keys-mode))
+#+end_src
 
+** Vterm
+Vterm needs =CMake= installed first.
+#+begin_src emacs-lisp
 (use-package vterm
   :bind ("C-c v" . vterm)
   :commands (vterm)
@@ -469,47 +600,79 @@ See `format-time-string' for FORMAT-STRING, TIME, and UNIVERSAL arguments."
   (setq vterm-max-scrollback 100000)
   :hook ((vterm-mode . (lambda() display-line-numbers-mode 0))
          (vterm-mode . (lambda() (setq show-trailing-whitespace nil)))))
+#+end_src
 
-;; end modules
-;; (load-file (concat user-emacs-directory "behavior.el"))
-;;
-;; This configuration defines various aspects of editor and user behavior
-;;
-;; (electric-pair-mode)
-;; enable paredit
+* Behavior
+
+This section configures various aspects of editor and UX behavior.
+#+begin_src emacs-lisp
 (setq-default tab-width 2)
 (setq standard-indent 2)
 (setq-default indent-tabs-mode nil)
 (fset 'yes-or-no-p 'y-or-n-p)
 (setq ring-bell-function 'ignore)
 
-;; Backup directory
+#+end_src
+
+** Backup
+I do my work in Git, so I don't really need Emacs making backup files, especially littered everywhere.
+
+#+begin_src emacs-lisp
+(setq make-backup-files nil)
+(setq auto-save-default t)
+(setq auto-save-timeout 20)
+(setq auto-save-interval 200)
+(setq create-lockfiles nil)
 (setq backup-directory-alist
       `((".*" . ,temporary-file-directory)))
 (setq auto-save-file-name-transforms
       `((".*" ,temporary-file-directory t)))
+#+end_src
 
-;; Don't echo passwords
+** Don't echo passwords
+
+#+begin_src emacs-lisp
 (add-hook 'comint-output-filter-functions 'comint-watch-for-password-prompt)
+#+end_src
 
-(setq insert-time-string-default-format "iso-8601-date")
-(server-start) ;; Start Emacs server
+** Start a server
 
-;; wrap-region
+Unless one is already running!
+
+#+begin_src emacs-lisp
+(unless (server-running-p)
+  (server-start)) ;; Start Emacs server
+#+end_src
+
+** Wrap region
+
+#+begin_src emacs-lisp
 (use-package wrap-region
   :config
   (wrap-region-global-mode t)
   (wrap-region-add-wrapper "`" "`"))
+#+end_src
 
-(setq x-select-enable-clipboard t)
+** Cutting and pasting uses the clipboard
 
+#+begin_src emacs-lisp
+(setq select-enable-clipboard t)
+#+end_src
+
+** Swap quotes with a key
+
+#+begin_src emacs-lisp
 (use-package toggle-quotes
   :bind ("C-'" . toggle-quotes))
+#+end_src
 
-;;
-;; Inspired by https://protesilaos.com/codelog/2024-02-17-emacs-modern-minibuffer-packages/
-;; Replaces previous use of ivy, counsel, etc.
-;;
+** Minibuffer packages
+
+Inspired by https://protesilaos.com/codelog/2024-02-17-emacs-modern-minibuffer-packages/
+
+Alternative of of ivy, counsel, swiper.
+
+#+begin_src emacs-lisp
 (use-package vertico
   :init
   (vertico-mode)
@@ -539,11 +702,26 @@ See `format-time-string' for FORMAT-STRING, TIME, and UNIVERSAL arguments."
          ;; Switch to another buffer, or bookmarked file, or recently
          ;; opened file.
          ("M-s M-b" . consult-buffer)))
+#+end_src
 
+#+begin_src emacs-lisp
+
+#+end_src
+
+** Which key
+
+#+begin_src emacs-lisp
 (which-key-mode 1)
 (which-key-setup-side-window-right-bottom)
+#+end_src
 
-;; https://github.com/Alexander-Miller/treemacs
+** Treemacs
+
+Sometimes a file tree drawer is neat.
+
+https://github.com/Alexander-Miller/treemacs
+
+#+begin_src emacs-lisp
 (use-package treemacs
   :bind (("M-0" . treemacs-select-window)
          ("M-o" . ace-window)
@@ -551,18 +729,28 @@ See `format-time-string' for FORMAT-STRING, TIME, and UNIVERSAL arguments."
 
 (use-package treemacs-projectile)
 (use-package treemacs-magit)
+#+end_src
 
+** Dired preview
+#+begin_src emacs-lisp
 (use-package dired-preview
   :hook (after-init . dired-preview-global-mode))
+#+end_src
 
-;; Use ripgrep for rgrep
+** Ripgrep
+#+begin_src emacs-lisp
 (grep-apply-setting 'grep-template "rg --no-heading -H -uu -g <F> <R> <D>")
+#+end_src
 
-;; end behavior
-;; (load-file (concat user-emacs-directory "appearance.el"))
-;;
-;; This configuration defines the look and feel of the editor
-;;
+** TODO Parenthesis, electric pair, etc
+Don't use =electric-pair-mode=, use =paredit=.
+** TODO rainbow parens
+
+* Appearance
+
+Some basics.
+
+#+begin_src emacs-lisp
 (tooltip-mode -1)
 (menu-bar-mode 0)
 (tool-bar-mode -1)
@@ -572,59 +760,128 @@ See `format-time-string' for FORMAT-STRING, TIME, and UNIVERSAL arguments."
 (global-hl-line-mode 1)
 (setq create-lockfiles nil)
 (setq inhibit-startup-message t)
-(setq-default frame-title-format "%b (%f)")
+(setq frame-title-format
+      '(:eval
+        (let* ((buf-name (buffer-name))
+               (file-name (or (buffer-file-name) "No file"))
+               (short-file-name (if (stringp file-name)
+                                    (abbreviate-file-name file-name)
+                                  "No file"))
+               (width (frame-width))
+               (height (frame-height)))
+          (format "Emacs - %s (%s) - %dx%d"
+                  buf-name short-file-name width height))))
+#+end_src
 
-;; Turn on line numbers everywhere, except...
+** Line Numbers
+
+Turn on line numbers everywhere, except...
+
+#+begin_src emacs-lisp
 (global-display-line-numbers-mode 1)
 (dolist (mode '(term-mode-hook
                 treemacs-mode-hook
                 eshell-mode-hook))
   (add-hook mode (lambda() (display-line-numbers-mode 0))))
+#+end_src
 
-;; Set default font
+#+begin_src emacs-lisp
 (setq my-font (cond ((window-system) "BlexMono Nerd Font")
                     ("Monospace")))
-(set-face-attribute 'default nil :family my-font :height 160)
-(set-frame-font (concat my-font "-16"))
+(set-face-attribute 'default nil :family my-font :height 180)
+(set-frame-font (concat my-font "-18"))
+#+end_src
 
-;; Configure a nice modeline with doom
-;; https://github.com/doomemacs/doomemacs/issues/724
-;; M-x all-the-icons-install-fonts
-;; M-x nerd-icons-install-fonts
-;; (use-package all-the-icons)
-(use-package doom-modeline
-  :init (doom-modeline-mode 1))
+** Pick a nice theme
 
-;; (use-package solarized-theme
-;;   :config
-;;   (load-theme 'solarized-light t)
-;;   (setq solarized-use-variable-pitch nil)
-;;   (setq solarized-scale-org-headlines nil))
+#+begin_src emacs-lisp
+(defvar jt/light-theme 'ef-elea-light
+  "My preferred light theme.")
 
-;; (set-cursor-color "darkorange")
-;; (set-face-attribute 'cursor nil :background "darkorange")
-;; themes I like:
-;; dark
-;;  ef-bio
-;;  ef-owl
-;; light
-;;  ef-melissa-light
-;;  ef-elea-light
-;;
+(defvar jt/dark-theme 'ef-bio
+  "My preferred dark theme.")
+
+(defvar jt/current-theme jt/light-theme
+  "Currently active theme.")
+#+end_src
+
+*** Solarized
+
+My goto, the GOAT, Solarized. But for now, we're playing with others:
+
+#+begin_src emacs-lisp :tangle no
+(setq jt/current-theme solarized-light)
+
+(use-package solarized-theme
+  :config
+  (load-theme jt/current-theme t)
+  (setq solarized-use-variable-pitch nil)
+  (setq solarized-scale-org-headlines nil))
+#+end_src
+
+*** ef-themes
+
+I'm trying Prot's =ef-themes= package.
+
+- https://protesilaos.com/emacs/ef-themes
+- https://protesilaos.com/emacs/ef-themes-pictures
+
+So far, I like these:
+
+- ef-bio
+- ef-owl
+- ef-melissa-light
+- ef-elea-light
+
+#+begin_src emacs-lisp
 (use-package ef-themes
   :config
-  (load-theme 'ef-elea-light t))
+  (load-theme jt/current-theme t))
+#+end_src
 
-(defun my-ef-themes-mode-line ()
-  "Tweak the style of the mode lines."
-  (ef-themes-with-colors
-    (custom-set-faces
-     `(mode-line ((,c :background ,bg-mode-line :foreground ,fg-mode-line :box (:line-width 1 :color ,fg-dim))))
-     `(mode-line-inactive ((,c :box (:line-width 1 :color ,bg-active)))))))
+*** Switch between Light and Dark mode themes
 
-(add-hook 'ef-themes-post-load-hook #'my-ef-themes-mode-line)
+#+begin_src emacs-lisp
+(defun jt/toggle-theme ()
+  "Toggle between light and dark ef-themes."
+  (interactive)
+  (let ((new-theme (if (eq jt/current-theme jt/light-theme)
+                       jt/dark-theme
+                     jt/light-theme)))
+    (mapc #'disable-theme custom-enabled-themes)
+    (load-theme new-theme t)
+    (setq jt/current-theme new-theme)))
 
-;; manage trailing whitespace settings:
+(keymap-global-set "C-c l" #'jt/toggle-theme)
+#+end_src
+
+** Modeline
+
+Configure a nice modeline with doom
+https://github.com/doomemacs/doomemacs/issues/724
+
+I may replace the modeline with something else like what Prot has created.
+#+begin_src emacs-lisp
+(use-package all-the-icons)
+;; (use-package nerd-icons-install-fonts)
+(use-package doom-modeline
+  :init (doom-modeline-mode 1))
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
+;; (defun my-ef-themes-mode-line ()
+;;   "Tweak the style of the mode lines."
+;;   (ef-themes-with-colors
+;;     (custom-set-faces
+;;      `(mode-line ((,c :background ,bg-mode-line :foreground ,fg-mode-line :box (:line-width 1 :color ,fg-dim))))
+;;      `(mode-line-inactive ((,c :box (:line-width 1 :color ,bg-active)))))))
+
+;; (add-hook 'ef-themes-post-load-hook #'my-ef-themes-mode-line)
+#+end_src
+
+* Trailing whitespace
+
+#+begin_src emacs-lisp
 (setq-default show-trailing-whitespace t)
 
 (remove-hook 'before-save-hook 'delete-trailing-whitespace)
@@ -636,17 +893,30 @@ See `format-time-string' for FORMAT-STRING, TIME, and UNIVERSAL arguments."
                 minibuffer-setup-hook))
   (add-hook hook
             (lambda () (setq show-trailing-whitespace nil))))
-;; end appearance
-;;
-;;
+
+#+end_src
+
+* Load work-specific configuration
+
+I don't necessarily need the work stuff in my normal config, since it may have proprietary or confidential information like hostnames or URLs.
+
+#+begin_src emacs-lisp
 (defvar work-config (concat user-emacs-directory "work.el"))
 (when (file-exists-p work-config)
   (load-file work-config))
+#+end_src
 
-;; Do some Kill This With Fire nonsense.
-;; Custom variables file
-(setq custom-file "~/.emacs.d/custom.el")
-(load-file custom-file)
+* Stuff customization elsewhere
 
+I've written this glorious org-mode file that gets tangled, why do I need "customize"? Stick that in a temp file.
+
+#+begin_src emacs-lisp
+(setq custom-file (make-temp-file "emacs-custom-"))
+#+end_src
+
+* Start in Org
+
+We can do anything in org mode, why start a scratch buffer as =emacs-lisp= if we can insert code blocks and evaluate them. Or even tangle them idk.
+#+begin_src emacs-lisp
 (setq initial-major-mode 'org-mode)
 #+end_src
