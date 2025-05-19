@@ -405,11 +405,28 @@ See `format-time-string' for FORMAT-STRING, TIME, and UNIVERSAL arguments."
 (setq insert-time-string-default-format "iso-8601-date")
 #+end_src
 * Modules and Languages
+** TODO smartparens, paredit, electric pair, etc
+Smartparens?
+https://www.emacswiki.org/emacs/ParEdit
+
+parinfer is deprecated. There's a rust implementation but it doesn't support Windows, requires curl, and doesn't sound very Emacs-y.
+
+Maybe not paredit? https://andreyor.st/posts/2021-09-30-why-is-paredit-is-so-un-emacsy/
+#+begin_src emacs-lisp
+(use-package smartparens
+  :hook (prog-mode
+         text-mode
+         markdown-mode
+         enh-ruby-mode
+         emacs-lisp-mode
+         org-mode)
+  :config (require 'smartparens-config))
+#+end_src
 ** Lisp
 
 Emacs lisp and friends want paredit mode
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (autoload 'enable-paredit-mode "paredit"
   "Turn on pseudo-structural editing of Lisp code."
   t)
@@ -543,9 +560,9 @@ Ruby is my favorite programming language, so let's treat it right.
           (lambda () (auto-fill-mode -1)))
 #+end_src
 
-Auto-complete =do..end= blocks.
+Auto-complete =do..end= blocks. Looks like `smartparens` does this, actually.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package ruby-end
   :hook (enh-ruby-mode . ruby-end-mode))
 #+end_src
@@ -742,8 +759,6 @@ https://github.com/Alexander-Miller/treemacs
 (grep-apply-setting 'grep-template "rg --no-heading -H -uu -g <F> <R> <D>")
 #+end_src
 
-** TODO Parenthesis, electric pair, etc
-Don't use =electric-pair-mode=, use =paredit=.
 ** TODO rainbow parens
 
 * Appearance
