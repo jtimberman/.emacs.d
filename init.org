@@ -54,7 +54,7 @@ Packages that have no configuration, hooks, etc.
 * Helper functions
 
 These helper functions are for later use.
-**  Auto-indent on Paste
+** Auto-indent on Paste
 
 #+begin_src emacs-lisp
 (dolist (command '(yank yank-pop))
@@ -405,9 +405,7 @@ See `format-time-string' for FORMAT-STRING, TIME, and UNIVERSAL arguments."
 (setq insert-time-string-default-format "iso-8601-date")
 #+end_src
 * Modules and Languages
-** TODO smartparens, paredit, electric pair, etc
-Smartparens?
-https://www.emacswiki.org/emacs/ParEdit
+** smartparens
 
 parinfer is deprecated. There's a rust implementation but it doesn't support Windows, requires curl, and doesn't sound very Emacs-y.
 
@@ -422,6 +420,47 @@ Maybe not paredit? https://andreyor.st/posts/2021-09-30-why-is-paredit-is-so-un-
          org-mode)
   :config (require 'smartparens-config))
 #+end_src
+** Dired
+#+begin_src emacs-lisp
+(defun jt/dired-hide-bollocks ()
+  (setq cursor-type nil)
+  (line-number-mode 0))
+
+(add-hook 'dired-mode-hook 'jt/dired-hide-cursor)
+#+end_src
+
+#+begin_src emacs-lisp
+  (use-package diff-hl
+    :after magit
+    :hook
+    (dired-mode-hook . diff-hl-dired-mode)
+    (magit-post-refresh-hook . diff-hl-magit-post-refresh))
+#+end_src
+*** Dired preview
+#+begin_src emacs-lisp
+(use-package dired-preview
+  :hook (after-init . dired-preview-global-mode))
+#+end_src
+*** Dired sidebar
+Install all the icons support for dired-mode.
+
+https://github.com/jojojames/dired-sidebar
+
+#+begin_src emacs-lisp
+
+(use-package all-the-icons-dired)
+
+(use-package all-the-icons
+  :hook (dired-mode-hook . all-the-icons-dired-mode))
+
+(use-package dired-sidebar
+  :bind ("s-," . dired-sidebar-toggle-sidebar)
+  :commands (dired-sidebar-toggle-sidebar)
+  :config
+  (setq dired-sidebar-theme 'icons)
+  :hook (dired-sidebar-mode . jt/dired-hide-cursor))
+#+end_src
+
 ** Lisp
 
 Emacs lisp and friends want paredit mode
@@ -734,11 +773,11 @@ Alternative of of ivy, counsel, swiper.
 
 ** Treemacs
 
-Sometimes a file tree drawer is neat.
+Sometimes a file tree drawer is neat. But dired-sidebar seems nicer.
 
 https://github.com/Alexander-Miller/treemacs
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package treemacs
   :bind (("M-0" . treemacs-select-window)
          ("M-o" . ace-window)
@@ -748,19 +787,15 @@ https://github.com/Alexander-Miller/treemacs
 (use-package treemacs-magit)
 #+end_src
 
-** Dired preview
-#+begin_src emacs-lisp
-(use-package dired-preview
-  :hook (after-init . dired-preview-global-mode))
-#+end_src
-
 ** Ripgrep
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (grep-apply-setting 'grep-template "rg --no-heading -H -uu -g <F> <R> <D>")
 #+end_src
 
 ** TODO rainbow parens
+#+begin_src emacs-lisp
 
+#+end_src
 * Appearance
 
 Some basics.
@@ -877,8 +912,6 @@ https://github.com/doomemacs/doomemacs/issues/724
 
 I may replace the modeline with something else like what Prot has created.
 #+begin_src emacs-lisp
-(use-package all-the-icons)
-;; (use-package nerd-icons-install-fonts)
 (use-package doom-modeline
   :init (doom-modeline-mode 1))
 #+end_src
