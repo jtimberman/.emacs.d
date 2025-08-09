@@ -43,7 +43,6 @@ Packages that have no configuration, hooks, etc.
 (use-package dockerfile-mode)
 (use-package editorconfig)
 (use-package kubernetes)
-(use-package magit)
 (use-package editorconfig)
 (use-package scratch)
 (use-package terraform-mode)
@@ -197,6 +196,44 @@ This makes M-q aka ~fill-paragraph~ be a toggle:
 (defun swap-with-right () (interactive) (swap-with 'right))
 #+end_src
 
+** Save As, via Robin
+
+#+begin_src emacs-lisp
+(defun my/save-as (&optional filename switch)
+  "Save the current buffer or region into a different file FILENAME and
+find it. Optional C-u prefix or SWITCH argument will additionally switch
+to the new buffer.
+
+Prompts for confirmation if the destination file exists, but will never
+overwrite the current buffer's file\; instead fails with \"file
+exists\"."
+  (interactive)
+  (let* ((current (buffer-file-name))
+         (newfilename
+          (or filename
+              (read-file-name "Save as file: "
+                              nil
+                              (and current
+                                   (concat
+                                    "Copy of "
+                                    (file-name-nondirectory current))))))
+         (mustbenew
+          (if (and current (file-equal-p newfilename current))
+              'excl
+            'confirm)))
+
+    (if (use-region-p)
+        (write-region (region-beginning) (region-end) newfilename nil nil nil mustbenew)
+      (save-restriction
+        (widen)
+        (write-region (point-min) (point-max) newfilename nil nil nil mustbenew)))
+
+    (if (or current-prefix-arg (and switch t))
+        (find-file newfilename)
+      (find-file-noselect newfilename))))
+(keymap-global-set "C-c f" 'my/save-as)
+#+end_src
+
 ** From Jim Weirich; Thanks Jim!
 
 https://github.com/jimweirich/emacs-setup-esk
@@ -319,8 +356,30 @@ Page up and page down work like we expect. Why is up down and down up? Because m
 (keymap-global-set "s-z" 'undo)
 #+end_src
 
-* Insert time string
+* Time Management
 
+#+begin_src emacs-lisp
+  (setq world-clock-list
+        ;; See /usr/share/zoneinfo
+        '(("US/Pacific" "Los Angeles")
+          ("US/Mountain" "Denver")
+          ("Canada/Eastern" "Quebec")
+          ("America/New_York" "New York") ; & Washington DC
+          ("Etc/UTC" "UTC")
+          ("Europe/London" "London")
+          ("Europe/Belgrade" "Belgrade") ; Lazar
+          ("Europe/Kyiv" "Kyiv")         ; Denys
+          ("Asia/Kolkata" "New Delhi")
+          ("Asia/Taipei" "Taiwan")
+          ("Australia/Brisbane" "Brisbane")))
+  (use-package tzc
+    :ensure t
+    :custom
+    (tzc-favourite-time-zones-alist world-clock-list))
+#+end_src
+
+** Insert time string
+2025-07-08
 Kevin Rodgers has this delightful bit to insert an ISO time string posted to the GNU Emacs mailing list in 2010.
 
 https://lists.gnu.org/archive/html/help-gnu-emacs/2010-02/msg00575.html
@@ -404,6 +463,30 @@ See `format-time-string' for FORMAT-STRING, TIME, and UNIVERSAL arguments."
 #+begin_src emacs-lisp
 (setq insert-time-string-default-format "iso-8601-date")
 #+end_src
+** =tzc= - timezone converter
+
+[[https://github.com/md-arif-shaikh/tzc][tzc]] is a tool that provides an enhanced world clock =tzc-world-clock= and facilitates time conversions between timezones, for example =tzc-convert-time= and =tzc-convert-current-time=. It accounts for summertime aka daylight savings time changes. The timezones are selected from the list in =tzc-time-zones=.
+
+#+begin_src emacs-lisp
+  (setq world-clock-list
+        ;; Note the non-breaking spaces "NO-BREAK SPACE Unicode: U+00A0" in the
+        ;; labels; normal spaces mess up tzc-world-clock's alignment.
+        '(("US/Pacific" "Los Angeles")
+          ("US/Mountain" "Denver")
+          ("Canada/Eastern" "Quebec")
+          ("America/New_York" "New York") ; & Washington DC
+          ("Etc/UTC" "UTC")
+          ("Europe/London" "London")
+          ("Europe/Kyiv" "Kyiv")         ; Denys
+          ("Asia/Kolkata" "New Delhi")
+          ("Asia/Taipei" "Taiwan")
+          ("Australia/Brisbane" "Brisbane")))
+  (use-package tzc
+    :ensure t
+    :custom
+    (tzc-favourite-time-zones-alist world-clock-list))
+#+end_src
+
 * Modules and Languages
 ** smartparens
 
@@ -420,13 +503,33 @@ Maybe not paredit? https://andreyor.st/posts/2021-09-30-why-is-paredit-is-so-un-
          org-mode)
   :config (require 'smartparens-config))
 #+end_src
+** Magit
+#+begin_src emacs-lisp
+(defun jt/git-commit-mode-setup ()
+  (set-fill-column 72)
+  (display-fill-column-indicator-mode)
+  (git-commit-turn-on-auto-fill))
+
+(use-package magit
+  :config
+  (setq
+   git-commit-summary-max-length 50
+   git-commit-style-convention-checks '(overlong-summary-line non-empty-second-line)
+   magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1)
+  :hook
+  (git-commit-mode . jt/git-commit-mode-setup))
+
+(use-package forge
+  :after magit)
+#+end_src
+
 ** Dired
 #+begin_src emacs-lisp
-(defun jt/dired-hide-bollocks ()
+(defun jt/dired-hider ()
   (setq cursor-type nil)
   (line-number-mode 0))
 
-(add-hook 'dired-mode-hook 'jt/dired-hide-cursor)
+(add-hook 'dired-mode-hook 'jt/dired-hider)
 #+end_src
 
 #+begin_src emacs-lisp
@@ -439,7 +542,8 @@ Maybe not paredit? https://andreyor.st/posts/2021-09-30-why-is-paredit-is-so-un-
 *** Dired preview
 #+begin_src emacs-lisp
 (use-package dired-preview
-  :hook (after-init . dired-preview-global-mode))
+  :hook (after-init . dired-preview-global-mode)
+  :config (setq dired-preview-delay 2))
 #+end_src
 *** Dired sidebar
 Install all the icons support for dired-mode.
@@ -452,13 +556,22 @@ https://github.com/jojojames/dired-sidebar
 
 (use-package all-the-icons
   :hook (dired-mode-hook . all-the-icons-dired-mode))
+#+end_src
+
+Remember to run this after init - it prompts/downloads every time so we don't tangle.
+
+#+begin_src emacs-lisp :tangle no
+(all-the-icons-install-fonts)
+#+end_src
+
+#+begin_src emacs-lisp
 
 (use-package dired-sidebar
   :bind ("s-," . dired-sidebar-toggle-sidebar)
   :commands (dired-sidebar-toggle-sidebar)
   :config
   (setq dired-sidebar-theme 'icons)
-  :hook (dired-sidebar-mode . jt/dired-hide-cursor))
+  :hook (dired-sidebar-mode . jt/dired-hider))
 #+end_src
 
 ** Lisp
@@ -510,6 +623,13 @@ Emacs lisp and friends want paredit mode
 
 ** Org Mode
 *** Setup org-mode
+
+There's a horrifying message that repeatedly pops up and annoys everyone in the room if =org-indent-mode= is true. Something like =org-indent-initialize-agent= - why do we need an agent for this? We're not MI-6. Using this at the top of an =org= file makes it do what I want anyway.
+
+#+begin_src org :tangle no
+#+startup: content indent
+#+end_src
+
 #+begin_src emacs-lisp
 (use-package org
   :mode (("\\.org$" . org-mode))
@@ -517,7 +637,8 @@ Emacs lisp and friends want paredit mode
   :config
   (require 'org-tempo)
   (setq org-edit-src-content-indentation 0)
-  (setq org-indent-mode t)
+;;  (setq org-indent-mode t)
+;;  (setq org-startup-indented t)
   (setq org-src-fontify-natively t)
   (setq org-startup-folded t)
   (setq org-startup-truncated nil)
@@ -646,16 +767,54 @@ It's cool but I'm not using it much yet, Let's make sure we have it, though.
 (add-to-list 'auto-mode-alist '("/authorized_keys2?\\'" . ssh-authorized-keys-mode))
 #+end_src
 
-** Vterm
-Vterm needs =CMake= installed first.
+** TODO TOML
+Install a =toml-mode= if I don't have one already, then make =credentials= files use the hook.
 #+begin_src emacs-lisp
+(use-package toml-mode)
+(add-to-list 'auto-mode-alist '("credentials$" . toml-mode))
+#+end_src
+** Vterm
+
+Vterm needs =CMake= installed first.
+
+#+begin_src emacs-lisp
+(defun jt/make-vterm-sane ()
+  (interactive)
+  (display-line-numbers-mode -1)
+  (setq show-trailing-whitespace nil)
+  (global-hl-line-mode -1))
+
 (use-package vterm
   :bind ("C-c v" . vterm)
   :commands (vterm)
   :config
   (setq vterm-max-scrollback 100000)
-  :hook ((vterm-mode . (lambda() display-line-numbers-mode 0))
-         (vterm-mode . (lambda() (setq show-trailing-whitespace nil)))))
+  :hook (vterm-mode . jt/make-vterm-sane))
+#+end_src
+
+** =man(1)= pages
+
+Make reading =man= pages slightly more ergonomic; scroll like a pager, make hyperlinks followable, no line numbers or line wrapping.
+
+#+begin_src emacs-lisp
+  (add-hook 'Man-mode-hook 'scroll-lock-mode)
+  (add-hook 'Man-mode-hook 'goto-address-mode)
+  (add-hook 'Man-mode-hook (lambda ()
+                             (display-line-numbers-mode -1)
+                             (visual-line-mode -1)))
+#+end_src
+
+*** Bug workaround
+
+macOS's BSD =sed(1)= doesn't like Emacs 30.1's command line and throws this error =sed: 1: "/^[\o001-\o032][\o001-\ ...": RE error: invalid character range=; [[https://github.com/mwolson/emacs-shared/blob/fe001fa80c629a3834d753a6b953772dea0c2657/init/shared-init.el#L99C1-L106C35][this workaround]] can be removed once this [[https://github.com/emacs-mirror/emacs/commit/fc5e905dc90e21b1a381bde42e22c06f45c17e16][patch for Bug #77944]] is merged upstream—check the contents of =(find-library "man")= somewhere around line 655:
+
+#+begin_src emacs-lisp
+  (with-eval-after-load "man"
+    (setq Man-filter-list
+          (cl-subst "-e '/^[[:cntrl:]][[:cntrl:]]*$/d'"
+                    "-e '/^[\\o001-\\o032][\\o001-\\o032]*$/d'"
+                    Man-filter-list
+                    :test #'equal)))
 #+end_src
 
 * Behavior
@@ -834,6 +993,7 @@ Turn on line numbers everywhere, except...
                 eshell-mode-hook))
   (add-hook mode (lambda() (display-line-numbers-mode 0))))
 #+end_src
+** Font and size
 
 #+begin_src emacs-lisp
 (setq my-font (cond ((window-system) "BlexMono Nerd Font")
@@ -848,7 +1008,7 @@ Turn on line numbers everywhere, except...
 (defvar jt/light-theme 'ef-elea-light
   "My preferred light theme.")
 
-(defvar jt/dark-theme 'ef-bio
+(defvar jt/dark-theme 'ef-elea-dark
   "My preferred dark theme.")
 
 (defvar jt/current-theme jt/light-theme
@@ -913,18 +1073,20 @@ https://github.com/doomemacs/doomemacs/issues/724
 I may replace the modeline with something else like what Prot has created.
 #+begin_src emacs-lisp
 (use-package doom-modeline
-  :init (doom-modeline-mode 1))
+  :init (doom-modeline-mode 1)
+  :config
+  (setq doom-modeline-time t))
 #+end_src
 
 #+begin_src emacs-lisp :tangle no
-;; (defun my-ef-themes-mode-line ()
-;;   "Tweak the style of the mode lines."
-;;   (ef-themes-with-colors
-;;     (custom-set-faces
-;;      `(mode-line ((,c :background ,bg-mode-line :foreground ,fg-mode-line :box (:line-width 1 :color ,fg-dim))))
-;;      `(mode-line-inactive ((,c :box (:line-width 1 :color ,bg-active)))))))
+(defun my-ef-themes-mode-line ()
+  "Tweak the style of the mode lines."
+  (ef-themes-with-colors
+    (custom-set-faces
+     `(mode-line ((,c :background ,bg-mode-line :foreground ,fg-mode-line :box (:line-width 1 :color ,fg-dim))))
+     `(mode-line-inactive ((,c :box (:line-width 1 :color ,bg-active)))))))
 
-;; (add-hook 'ef-themes-post-load-hook #'my-ef-themes-mode-line)
+(add-hook 'ef-themes-post-load-hook #'my-ef-themes-mode-line)
 #+end_src
 
 * Trailing whitespace
@@ -966,5 +1128,6 @@ I've written this glorious org-mode file that gets tangled, why do I need "custo
 
 We can do anything in org mode, why start a scratch buffer as =emacs-lisp= if we can insert code blocks and evaluate them. Or even tangle them idk.
 #+begin_src emacs-lisp
+(setq initial-scratch-message nil)
 (setq initial-major-mode 'org-mode)
 #+end_src
