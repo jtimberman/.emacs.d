@@ -11,6 +11,9 @@ For an introduction to the idea, here's a couple good videos to watch:
 - https://www.youtube.com/watch?v=ycyxytk1NAQ
 - https://www.youtube.com/watch?v=kkqVTDbfYp4
 
+I'm using Emacs Plus for Homebrew. Recently with the 30.2 upgrade, I encountered this issue, which I may correct by adding the =early-init.el= configuration described. Unless the author adds a fix.
+
+- https://github.com/d12frosted/homebrew-emacs-plus/issues/323
 * Set up packages
 
 First, let's setup the package manager. We're going to:
@@ -628,6 +631,7 @@ This package will export an org mode file as a presentation using Reveal.js
 - https://github.com/yjwen/org-reveal
 
 #+begin_src emacs-lisp
+(use-package htmlize)
 (use-package ox-reveal)
 (setq org-export-with-broken-links 'mark)
 
@@ -683,7 +687,15 @@ Let's have some sane defaults on composing commit messages. This gets added as a
   (setq
    git-commit-summary-max-length 50
    git-commit-style-convention-checks '(overlong-summary-line non-empty-second-line)
-   magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1)
+   magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1
+   magit-repository-directories
+            '(("~/Development/csre/handbook" . 0)
+              ("~/Development/csre/incidents" . 0)
+              ("~/Development/csre/cookbooks/nexus3" . 0)
+              ("~/Development/csre/platform_policies" . 0)
+              ("~/Development/csre/nexus3-aws" . 0)
+              ("~/Development/csre/incidents" . 0)
+              ))
   :hook
   (git-commit-mode . jt/git-commit-mode-setup))
 #+end_src
@@ -948,7 +960,7 @@ Some basics.
 
 #+begin_src emacs-lisp
 (tooltip-mode -1)
-(menu-bar-mode 0)
+(menu-bar-mode 1)
 (tool-bar-mode -1)
 (show-paren-mode 1)
 (blink-cursor-mode 0)
