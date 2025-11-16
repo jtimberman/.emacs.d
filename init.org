@@ -392,6 +392,28 @@ Let's not make assumptions on macOS about modifier keys, since different version
 (keymap-global-set "C-c |" 'align-regexp)
 #+end_src
 
+** Tab bar
+
+s-{ s-} switch tabs
+s-1..9 select tabs
+
+#+begin_src emacs-lisp
+(keymap-global-set "s-t" 'tab-new)
+(keymap-global-set "s-w" 'tab-close)
+(keymap-global-set "s-{" 'tab-previous)
+(keymap-global-set "s-}" 'tab-next)
+(keymap-global-set "s-9" 'tab-last)
+
+(global-set-key (kbd "s-1") (lambda () (interactive) (tab-bar-select-tab 1)))
+(global-set-key (kbd "s-2") (lambda () (interactive) (tab-bar-select-tab 2)))
+(global-set-key (kbd "s-3") (lambda () (interactive) (tab-bar-select-tab 3)))
+(global-set-key (kbd "s-4") (lambda () (interactive) (tab-bar-select-tab 4)))
+(global-set-key (kbd "s-5") (lambda () (interactive) (tab-bar-select-tab 5)))
+(global-set-key (kbd "s-6") (lambda () (interactive) (tab-bar-select-tab 6)))
+(global-set-key (kbd "s-7") (lambda () (interactive) (tab-bar-select-tab 7)))
+(global-set-key (kbd "s-8") (lambda () (interactive) (tab-bar-select-tab 8)))
+#+end_src
+
 ** macOS movement
 
 Command-up, down, left, and right behave like other parts of macOS
@@ -414,7 +436,7 @@ Several of these are configured as expected in EmacsPlus. However as described a
 (keymap-global-set "s-c" 'kill-ring-save)
 (keymap-global-set "s-s" 'save-buffer)
 (keymap-global-set "s-l" 'goto-line)
-(keymap-global-set "s-w" 'delete-frame)
+(keymap-global-set "s-W" 'delete-frame)
 (keymap-global-set "s-n" 'make-frame)
 (keymap-global-set "s-z" 'undo)
 #+end_src
@@ -1036,6 +1058,13 @@ Some basics.
                (height (frame-height)))
           (format "Emacs - %s (%s) - %dx%d"
                   buf-name short-file-name width height))))
+#+end_src
+
+** Tab bar
+
+#+begin_src emacs-lisp
+(setq tab-bar-close-button-show nil)
+(setq tab-bar-tab-hints t)
 #+end_src
 
 ** Line Numbers
