@@ -367,21 +367,30 @@ exists\"."
       (find-file-noselect newfilename))))
 #+end_src
 
-** From Endless Parentheses
+** Fill or Unfill Paragraph
 
-Toggle fill-paragraph - makes =M-q= (=fill-paragraph=) work as a toggle, filling on first press and unfilling on second.
+Make =M-q= toggle between filling and unfilling a paragraph. If the paragraph spans multiple lines, unfill it into a single line. If it is a single line, fill it to =fill-column=.
 
-From: https://endlessparentheses.com/fill-and-unfill-paragraphs-with-a-single-key.html
+Inspired by: https://endlessparentheses.com/fill-and-unfill-paragraphs-with-a-single-key.html
 
 #+begin_src emacs-lisp
-(defun endless/fill-or-unfill ()
-  "Like `fill-paragraph', but unfill if used twice."
+(defun jt/fill-or-unfill ()
+  "Fill or unfill paragraph at point.
+Multi-line paragraph gets joined to one line.
+Single long line gets filled to `fill-column'."
   (interactive)
   (let ((fill-column
-         (if (eq last-command 'endless/fill-or-unfill)
-             (progn (setq this-command nil)
-                    (point-max))
-           fill-column)))
+         (save-excursion
+           (let (beg end)
+             (backward-paragraph)
+             (skip-chars-forward "\n")
+             (setq beg (point))
+             (forward-paragraph)
+             (skip-chars-backward "\n")
+             (setq end (point))
+             (if (> (count-lines beg end) 1)
+                 (point-max)
+               fill-column)))))
     (call-interactively #'fill-paragraph)))
 #+end_src
 
@@ -556,7 +565,7 @@ Let's not make assumptions on macOS about modifier keys, since different version
 (keymap-global-set "C-c |" 'align-regexp)
 (keymap-global-set "C-c f" 'my/save-as)
 (keymap-global-set "C-c l" #'jt/toggle-theme)
-(global-set-key [remap fill-paragraph] #'endless/fill-or-unfill)
+(global-set-key [remap fill-paragraph] #'jt/fill-or-unfill)
 (keymap-global-set "M-<up>" 'jt/move-line-up)
 (keymap-global-set "M-<down>" 'jt/move-line-down)
 #+end_src
@@ -939,6 +948,10 @@ Colorize nested delimiters in code for better readability.
 (grep-apply-setting 'grep-template "rg --no-heading -H -uu -g <F> <R> <D>")
 #+end_src
 
+#+begin_src emacs-lisp
+
+#+end_src
+
 * File & Project Management
 
 ** Dired
@@ -1013,6 +1026,16 @@ Move =magit-repository-directories= to work.el, tbh.
   :bind ("C-c m" . magit-list-repositories))
 #+end_src
 
+#+begin_src emacs-lisp
+(defun my/magit-confirm-push-to-main (branch target args)
+    "Prompt before pushing to main on any remote."
+    (when (string-match-p "/main\\'" target)
+      (unless (yes-or-no-p (format "Really push to %s? " target))
+        (user-error "Push to %s cancelled" target))))
+
+  (advice-add 'magit-git-push :before #'my/magit-confirm-push-to-main)
+#+end_src
+
 * Development Tools
 
 ** Flycheck
@@ -1055,6 +1078,13 @@ Language modes and configurations organized alphabetically.
 
 #+begin_src emacs-lisp
 (use-package dockerfile-mode)
+#+end_src
+
+** Dhall
+
+#+begin_src emacs-lisp
+(use-package dhall-mode
+  :mode "\\.dhall\\'")
 #+end_src
 
 ** JSON
@@ -1178,6 +1208,12 @@ It's cool but I'm not using it much yet, Let's make sure we have it, though.
 (use-package terraform-mode)
 #+end_src
 
+** Text
+
+#+begin_src emacs-lisp
+(setq sentence-end-double-space nil)
+#+end_src
+
 ** TOML
 
 Install a =toml-mode= if I don't have one already, then make Chef =credentials= files use the hook.
@@ -1215,6 +1251,7 @@ There's a horrifying message that repeatedly pops up and annoys everyone in the 
   :hook (org-mode . visual-line-mode)
   :config
   (require 'org-tempo)
+  (keymap-set org-mode-map "M-q" #'jt/fill-or-unfill)
   (setq org-edit-src-content-indentation 0)
   (setq org-src-fontify-natively t)
   (setq org-startup-folded t)
@@ -1348,11 +1385,17 @@ macOS's BSD =sed(1)= doesn't like Emacs 30.1's command line and throws this erro
 
 ** sparkweather
 
-#+begin_src emacs-lisp :tangle no
-(use-package calendar)
+#+begin_src emacs-lisp
+(use-package calendar
+  :config
+  (setq calendar-latitude 39.8667)
+  (setq calendar-longitude -105.05))
+
 (use-package sparkweather
   :vc (:url "https://github.com/aglet/sparkweather")
-  :after calendar)
+  :after calendar
+  :config
+  (setq sparkweather-temperature-unit "F"))
 #+end_src
 
 * Finalization
